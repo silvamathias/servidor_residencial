@@ -17,12 +17,7 @@ Apresentação
   4. [Instalando o SSH](#Instalando_o_SSH)
   5. [Instalando o SAMBA](#Instalando_o_SAMBA)
   6. [Instalando o PostgreeSQL](#Instalando_o_PostgreeSQL)
-  
-  1. [Introdução](#Introdução)
-  2. [Por que faser um servidor físico?](#por_que_fazer)
-  3. [Requisitos](#Requisitos)
-2. [Configurando o Servidor](#Configurando_o_Servidor)
-  
+   
 
 <a id="#Apresentação"></a>
 
