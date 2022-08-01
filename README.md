@@ -2,17 +2,17 @@
 
 ## Sumário
 
-1.  Apresentação
+1. Apresentação
     1.  [Introdução](#Introdução)
     2.  [Por que faser um servidor físico?](#por_que_fazer)
     3.  [Requisitos](#Requisitos) 
-2.  Configurando o Servidor
-    1.  [Instalando o Linux](#Instalando_o_Linux)
-    2.  [Verificando a Internet](#Verificando_a_Internet)
-    3.  [Atualisando o Sistema](#Atualizando_o_sistema)
-    4.  [Instalando o SSH](#Instalando_o_SSH)
-    5.  [Instalando o SAMBA](#Instalando_o_SAMBA)
-    6.  [Instalando o PostgreeSQL](#Instalando_o_PostgreeSQL)
+2. Configurando o Servidor
+    1. [Instalando o Linux](#Instalando_o_Linux)
+    2. [Verificando a Internet](#Verificando_a_Internet)
+    3. [Atualisando o Sistema](#Atualizando_o_sistema)
+    4. [Instalando o SSH](#Instalando_o_SSH)
+    5. [Instalando o SAMBA](#Instalando_o_SAMBA)
+    6. [Instalando o PostgreeSQL](#Instalando_o_PostgreeSQL)
    
 
 ## 1 Apresentação
