@@ -2,15 +2,11 @@
 
 ## Sumário
 
-<a id="#Apresentação"></a>
-
-Apresentação
-
-1.  [Apresentação](#Apresentação)
+1.  Apresentação
     1.  [Introdução](#Introdução)
     2.  [Por que faser um servidor físico?](#por_que_fazer)
     3.  [Requisitos](#Requisitos) 
-2.  [Configurando o Servidor](#Configurando_o_Servidor)
+2.  Configurando o Servidor
     1.  [Instalando o Linux](#Instalando_o_Linux)
     2.  [Verificando a Internet](#Verificando_a_Internet)
     3.  [Atualisando o Sistema](#Atualizando_o_sistema)
@@ -18,8 +14,6 @@ Apresentação
     5.  [Instalando o SAMBA](#Instalando_o_SAMBA)
     6.  [Instalando o PostgreeSQL](#Instalando_o_PostgreeSQL)
    
-
-<a id="#Apresentação"></a>
 
 ## 1 Apresentação
 
@@ -38,8 +32,6 @@ Apresentação
 #### Sistema Operacional
 
 As distribuições **Linux** maiis comuns em servidores são Ubuntu, Debian, SUSE, Fedora, Red Hat, CentOS
-
-<a id="#Configurando_o_Servidor"></a>
 
 ## 2 Configurando o Servidor
 
