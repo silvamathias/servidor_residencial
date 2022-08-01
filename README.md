@@ -17,15 +17,15 @@
 
 ## 1 Apresentação
 
-<a id="#Introdução"></a>
+<a id="Introdução"></a>
 
 ## 1 I Introdução
 
-<a id="#por_que_fazer"></a>
+<a id="por_que_fazer"></a>
 
 ## 1 II Por que faser um servidor físico?
 
-<a id="#Requisitos"></a>
+<a id="Requisitos"></a>
 
 ## 1 III Requisitos
 
@@ -35,28 +35,28 @@ As distribuições **Linux** maiis comuns em servidores são Ubuntu, Debian, SUS
 
 ## 2 Configurando o Servidor
 
-<a id="#Instalando_o_Linux"></a>
+<a id="Instalando_o_Linux"></a>
 
 ### 2 I Instalando o Linux
 
 Este início é igual para qualquer distribuição linux, Você vai presisar baixar a imagem ISO do site da Ubuntu e criar um pen drive com esta imagem. Feito isto, ligue o computador com o pen drive já conectado na porta USB e entre na tela de opção de boot, geralmente apertando a tecla *F8*, selecione o pen drive que está a imagem ISO e confirme para abrir o assistente de instalação. É recomendado usar uma verção própria para servidores. o Ubuntu Server possui um assistente de instalação diferente das distros voltadas para uso pessoal. Como não possui interface gráfica a instalação é feita toda em modo texto porém o que é preciso fazer aparece em etapas na tela onde deve-se apenas escolher as opções e confirmar. Ao final do processo seu sistema estará instalado. Caso tenha difivuldades pode optar por uma versão com interface gráfica mas é extremamente recomendado que seja uma versão LTS. 
 
-<a id="#Verificando_a_Internet"></a>
+<a id="Verificando_a_Internet"></a>
 
 ### 2 II Verificando a Internet
 
-<a id="#Atualizando_o_sistema"></a>
+<a id="Atualizando_o_sistema"></a>
 
 ### 2 III Atualizando o sistema
 
-<a id="#Instalando_o_SSH"></a>
+<a id="Instalando_o_SSH"></a>
 
 ### 2 IV Instalando o SSH
 
-<a id="#Instalando_o_SAMBA"></a>
+<a id="Instalando_o_SAMBA"></a>
 
 ### 2 V Instalando o SAMBA
 
-<a id="#Instalando_o_PostgreeSQL"></a>
+<a id="Instalando_o_PostgreeSQL"></a>
 
 ### 2 VI Instalando o PostgreeSQL
