@@ -60,9 +60,9 @@ Este início é igual para qualquer distribuição linux, Você vai presisar bai
 
 #### Usando SSH
 
-O Ubuntu server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use o comando ~~~sudo apt install ssh~~~~.
+O Ubuntu server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use o comando `sudo apt install ssh`.
 
-A chave SSH usa o IP para se conectar. Durante a instalação esta informação é mostrada na etapa que configura a internet. caso não tenha anotado use o comando ~~~ifconfig~~~~ . Será mostrado uma sequencia de números iniciando com 192.168 e seguida de mais dois grupos de dígitos separados por ponto.
+A chave SSH usa o IP para se conectar. Durante a instalação esta informação é mostrada na etapa que configura a internet. caso não tenha anotado use o comando `ifconfig` . Será mostrado uma sequencia de números iniciando com 192.168 e seguida de mais dois grupos de dígitos separados por ponto.
 
 Com estas informações já é possivel acessar o servidor usando o SSH mas é possivel seguir com a configuração diretamente no servidor ou então pode  desligá-lo; colocá-lo ao lado do seu roteador de internet; conectá-los usando um cabo de rede e ligar o PC novamente sem monitor ou teclado.
 
