@@ -8,13 +8,12 @@
     3.  [Requisitos](#Requisitos) 
 2. Configurando o Servidor
     1. [Instalando o Linux](#Instalando_o_Linux)
-        * [Pendriver bootavel](#pendrive_boot)
+        * [Pen drive bootavel](#pendrive_boot)
         * [Usando SSH](#ssh)
-    2. [Verificando a Internet](#Verificando_a_Internet)
-    3. [Atualisando o Sistema](#Atualizando_o_sistema)
-    4. [Instalando o SSH](#Instalando_o_SSH)
-    5. [Instalando o SAMBA](#Instalando_o_SAMBA)
-    6. [Instalando o PostgreeSQL](#Instalando_o_PostgreeSQL)
+    2. [Atualisando o Sistema](#Atualizando_o_sistema)
+    3. [Configurando IP fixo](#ip_fixo)
+    4. [Instalando o SAMBA](#Instalando_o_SAMBA)
+    5. [Instalando o PostgreeSQL](#Instalando_o_PostgreeSQL)
    
 
 ## 1 Apresentação
@@ -45,7 +44,7 @@ As distribuições **Linux** maiis comuns em servidores são Ubuntu, Debian, SUS
 
 <a id="pendrive_boot"></a>
 
-#### Pendriver bootavel
+#### Pen drive bootavel
 
 Este início é igual para qualquer distribuição linux, Você vai presisar baixar a imagem ISO do site da Ubuntu e criar um pen drive com esta imagem usando um dos programas abaixo:
 
@@ -106,20 +105,27 @@ Last login: Sat Aug  6 17:33:09 2022
 operador@siscasa:~$ 
 ~~~
 
- 
+ A linha `operador@siscasa:~$` indica que a partir de agora você está dentro do servidor onde o seu usuário é *operador* e o nome do servidor é *siscasa* que foram definidos na instalação do Ubuntu. Note também que nem sempre, ao digitar uma senha no terminal Linux, aparecerá '*' para cada tecla clicada. 
 
-
-<a id="Verificando_a_Internet"></a>
-
-### 2 II Verificando a Internet
 
 <a id="Atualizando_o_sistema"></a>
 
-### 2 III Atualizando o sistema
+### 2 II Atualizando o sistema
 
-<a id="Instalando_o_SSH"></a>
+`sudo -i`
+`apt update`
 
-### 2 IV Instalando o SSH
+~~~shell
+operador@siscasa:~$ sudo -i
+[sudo] password for operador: 
+root@siscasa:~# apt update
+~~~
+
+`apt upgrade`
+
+<a id="ip_fixo"></a>
+
+### 2 III Configurando IP fixo
 
 <a id="Instalando_o_SAMBA"></a>
 
