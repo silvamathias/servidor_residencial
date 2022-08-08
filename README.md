@@ -59,9 +59,33 @@ Este início é igual para qualquer distribuição linux, Você vai presisar bai
 
 #### Usando SSH
 
-O Ubuntu server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use o comando `sudo apt install ssh`.
+O Ubuntu server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use os comandos:
 
-A chave SSH usa o IP para se conectar. Durante a instalação esta informação é mostrada na etapa que configura a internet. caso não tenha anotado use o comando `ifconfig` . Será mostrado uma sequencia de números iniciando com 192.168 e seguida de mais dois grupos de dígitos separados por ponto.
+* `sudo apt install opensh-server` para instalar o programa; 
+* `sudo service ssh start` para iniciar o serviço;
+* `ps aux | grep ssh` para testar o programa.
+
+A chave SSH usa o IP para se conectar. Durante a instalação esta informação é mostrada na etapa que configura a internet. caso não tenha anotado use o comando `ip a` . Será mostrado uma sequencia de números iniciando com 192.168 e seguida de mais dois grupos de dígitos separados por ponto.
+
+~~~shell
+operador@siscasa:~$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 48:5b:39:ce:f1:c5 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.78/24 metric 100 brd 192.168.0.255 scope global dynamic enp3s0
+       valid_lft 2564sec preferred_lft 2564sec
+    inet6 2804:14d:5c20:9479:4a5b:39ff:fece:f1c5/64 scope global dynamic mngtmpaddr noprefixroute
+       valid_lft 3600sec preferred_lft 3600sec
+    inet6 fe80::4a5b:39ff:fece:f1c5/64 scope link
+       valid_lft forever preferred_lft forever
+~~~
+
+No código acima é possível ver o retorno do comando `ip a` informando o ip do servidor como sendo **192.168.0.78**
 
 Com estas informações já é possivel acessar o servidor usando o SSH mas é possivel seguir com a configuração diretamente no servidor ou então pode  desligá-lo; colocá-lo ao lado do seu roteador de internet; conectá-los usando um cabo de rede e ligar o PC novamente sem monitor ou teclado.
 
@@ -112,6 +136,7 @@ operador@siscasa:~$
 
 ### 2 II Atualizando o sistema
 
+
 `sudo -i`
 `apt update`
 
@@ -126,6 +151,71 @@ root@siscasa:~# apt update
 <a id="ip_fixo"></a>
 
 ### 2 III Configurando IP fixo
+
+Voltando ao resultado do comando `ip a`, além do ip atual, é possível decobrir o nome da placa de rede que, neste exemplo é **enp3s0**
+~~~shell
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 48:5b:39:ce:f1:c5 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.78/24 metric 100 brd 192.168.0.255 scope global dynamic enp3s0
+       valid_lft 2564sec preferred_lft 2564sec
+    inet6 2804:14d:5c20:9479:4a5b:39ff:fece:f1c5/64 scope global dynamic mngtmpaddr noprefixroute
+       valid_lft 3600sec preferred_lft 3600sec
+    inet6 fe80::4a5b:39ff:fece:f1c5/64 scope link
+       valid_lft forever preferred_lft forever
+~~~
+
+~~~shell
+root@siscasa:~# resolvectl status
+Global
+       Protocols: -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+resolv.conf mode: stub
+
+Link 2 (enp3s0)
+    Current Scopes: DNS
+         Protocols: +DefaultRoute +LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+Current DNS Server: 181.213.132.2
+       DNS Servers: 192.168.0.1 181.213.132.2 181.213.132.3 2804:14d:1:0:181:213:132:2
+                    2804:14d:1:0:181:213:132:3
+~~~
+
+~~~shell
+root@siscasa:~# cd /etc/netplan
+root@siscasa:/etc/netplan# ls
+00-installer-config.yaml
+root@siscasa:/etc/netplan# cp 00-installer-config.yaml  bk-00-installer-config.yaml
+root@siscasa:/etc/netplan# rm 00-installer-config.yaml
+root@siscasa:/etc/netplan# nano 01-config-rede.yaml
+~~~
+
+~~~shell
+#configurando a interface enp3s0 com um IP estático
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        enp3s0:
+            addresses:
+                - 192.168.0.101/24
+            nameservers:
+                search: [mydomain, otherdomain]
+                addresses: [192.168.0.1, 181.213.132.2]
+            routes:
+                - to: default
+                  via: 192.168.0.1
+~~~
+
+~~~shell
+root@siscasa:/etc/netplan# netplan try
+Do you want to keep these settings?
+
+
+Press ENTER before the timeout to accept the new configuration
+
+
+Changes will revert in  98 seconds
+Configuration accepted.
+root@siscasa:/etc/netplan# netplan apply
+~~~
 
 <a id="Instalando_o_SAMBA"></a>
 
