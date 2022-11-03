@@ -164,6 +164,8 @@ Voltando ao resultado do comando `ip a`, além do ip atual, é possível decobri
        valid_lft forever preferred_lft forever
 ~~~
 
+Use o comando **resolvectl status** para visualizar os servidores DNS e anote os IP's da linha **DNS Servers**.
+
 ~~~shell
 root@siscasa:~# resolvectl status
 Global
@@ -178,6 +180,8 @@ Current DNS Server: 181.213.132.2
                     2804:14d:1:0:181:213:132:3
 ~~~
 
+Vá até a pasta netplan com o comando **cd /etc/netplan** e procure o arquivo de configuração. Antes de remove-lo, copie por preucalção com outro nome para deixar de backup. No exemplo abaixo foi usado o `nano` para criar um novo  arquivo. A regra é que o nome começe com número e termine com **.yaml**.
+
 ~~~shell
 root@siscasa:~# cd /etc/netplan
 root@siscasa:/etc/netplan# ls
@@ -186,6 +190,15 @@ root@siscasa:/etc/netplan# cp 00-installer-config.yaml  bk-00-installer-config.y
 root@siscasa:/etc/netplan# rm 00-installer-config.yaml
 root@siscasa:/etc/netplan# nano 01-config-rede.yaml
 ~~~
+
+Copie o código abaixo e cole dentro do arquivo de configuração que acabou de criare depois atualize os campos abaixo:
+
+* Altere **enp3s0** pelo nome da placa de rede de seu servidor;
+* Coloque aqui o IP que deseja usar no servidor. Neste exemplo foi trocado **192.168.0.78/24** por **192.168.0.101/24**;
+* Substitua **[192.168.0.1, 181.213.132.2]** pelos dois primeiros IP's DNS no padrão IPV4 que anotou na linha **DNS Servers**. Caso só tenha um, delete **, otherdomain** do item **search:** localizado na linha superior.
+
+Provavelmente o item **via** não precisará ser atualizado pois é onde se informa o IP do roteador e a maioria dos roteadores domésticos usam como padrão **192.168.0.1**.
+Neste arquivo a identação é importante para o funcionamento.
 
 ~~~shell
 #configurando a interface enp3s0 com um IP estático
@@ -203,6 +216,9 @@ network:
                 - to: default
                   via: 192.168.0.1
 ~~~
+
+Salve clicando **Ctrl + S** e saia do arquivo clicando **Ctrl + x**.
+Teste a configuração com o comando `netplan try`. Caso tenha dado tudo certo a menságem abaixo será mostrada. Clique **ENTER** conforme solicitado e aplique a as alterações com o comando `netplan apply`.
 
 ~~~shell
 root@siscasa:/etc/netplan# netplan try
