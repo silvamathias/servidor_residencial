@@ -240,3 +240,102 @@ root@siscasa:/etc/netplan# netplan apply
 <a id="Instalando_o_PostgreeSQL"></a>
 
 ### 2 VI Instalando o PostgreeSQL
+
+#### Instalando a verção mais recente.
+
+O código abaixo consta no site do [PostgreSql](https://www.postgresql.org/download/linux/ubuntu/). Funcionou copiando e colando no terminal linha a linha.
+
+~~~shell
+# Create the file repository configuration:
+sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+# Import the repository signing key:
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+# Update the package lists:
+sudo apt-get update
+
+# Install the latest version of PostgreSQL.
+# If you want a specific version, use 'postgresql-12' or similar instead of 'postgresql':
+sudo apt-get -y install postgresql
+~~~
+
+#### Alterando a senha do Postgre.
+
+Entre no Postgre com o comando `sudo -u postgres psql` e altere a senha usando `alter user postgres with encrypted password 'operador123456';`. Coloque sempre ***';'** no final para não apresentar erro. O comando **'\q'** sai do Postgre.
+
+~~~shell
+sudo -u postgres psql
+psql (16.0 (Ubuntu 16.0-1.pgdg22.04+1))
+Type "help" for help.
+
+postgres=# alter user postgres with encrypted password 'operador123456';
+ALTER ROLE
+postgres-# \q
+~~~
+
+#### Configurar o Firewall
+
+~~~shell
+#Ative o ufw
+operador@siscasa:~$ sudo ufw enable
+[sudo] password for operador: 
+Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
+Firewall is active and enabled on system startup
+
+#liberar o firewall para o postgre:
+operador@siscasa:~$ sudo ufw allow postgresql
+Rule added
+Rule added (v6)
+
+#reinicie o serviço postgre:
+operador@siscasa:~$ sudo systemctl restart postgresql.service 
+operador@siscasa:~$ 
+~~~
+
+
+
+~~~shell
+#entrando no postegre
+operador@siscasa:~$ sudo -u postgres psql
+psql (16.0 (Ubuntu 16.0-1.pgdg22.04+1))
+Type "help" for help.
+
+# criando banco
+postgres=# create database cidades;
+CREATE DATABASE
+
+# conectando ao banco
+postgres=# \c cidades
+You are now connected to database "cidades" as user "postgres".
+cidades=#
+
+# listando os bancos de dados existentes
+cidades=# \l
+                                                       List of databases
+   Name    |  Owner   | Encoding | Locale Provider |   Collate   |    Ctype    | ICU Locale | ICU Rules |   Access privileges   
+-----------+----------+----------+-----------------+-------------+-------------+------------+-----------+-----------------------
+ cidades   | postgres | UTF8     | libc            | pt_PT.UTF-8 | pt_PT.UTF-8 |            |           | 
+ postgres  | postgres | UTF8     | libc            | pt_PT.UTF-8 | pt_PT.UTF-8 |            |           | 
+ template0 | postgres | UTF8     | libc            | pt_PT.UTF-8 | pt_PT.UTF-8 |            |           | =c/postgres          +
+           |          |          |                 |             |             |            |           | postgres=CTc/postgres
+ template1 | postgres | UTF8     | libc            | pt_PT.UTF-8 | pt_PT.UTF-8 |            |           | =c/postgres          +
+           |          |          |                 |             |             |            |           | postgres=CTc/postgres
+(4 rows)
+
+cidades=# ^C
+
+~~~
+
+Outros comando úteis:
+
+|Comando|Descrição|
+|\d|lista as tabelas do banco de dados|
+|\dv|lista as views do banco de dados|
+|\di|lista os índices do banco de dados|
+|\db|lista as tablespaces|
+|\l|lista os bancos de dados|
+|\dg|lista as roles existentes (usuários ou grupos)|
+|\conninfo|apresenta informações sobre a conexão atual|
+|\h|lista os comandos SQL|
+|\h comando|apresenta detalhes sobre o comando|
