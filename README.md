@@ -293,7 +293,7 @@ operador@siscasa:~$ sudo systemctl restart postgresql.service
 operador@siscasa:~$ 
 ~~~
 
-
+#### Criando e acessando um banco de dados 
 
 ~~~shell
 #entrando no postegre
@@ -323,19 +323,19 @@ cidades=# \l
            |          |          |                 |             |             |            |           | postgres=CTc/postgres
 (4 rows)
 
-cidades=# ^C
-
+cidades=#
 ~~~
 
 Outros comando úteis:
 
-|Comando|Descrição|
-|\d|lista as tabelas do banco de dados|
-|\dv|lista as views do banco de dados|
-|\di|lista os índices do banco de dados|
-|\db|lista as tablespaces|
-|\l|lista os bancos de dados|
-|\dg|lista as roles existentes (usuários ou grupos)|
-|\conninfo|apresenta informações sobre a conexão atual|
-|\h|lista os comandos SQL|
-|\h comando|apresenta detalhes sobre o comando|
+**Comando**|**Descrição**
+|:---:|:---|
+\d|lista as tabelas do banco de dados
+\dv|lista as views do banco de dados
+\di|lista os índices do banco de dados
+\db|lista as tablespaces
+\l|lista os bancos de dados
+\dg|lista as roles existentes (usuários ou grupos)
+\conninfo|apresenta informações sobre a conexão atual
+\h|lista os comandos SQL
+\h comando|apresenta detalhes sobre o comando
