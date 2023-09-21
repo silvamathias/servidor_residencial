@@ -260,19 +260,6 @@ sudo apt-get update
 sudo apt-get -y install postgresql
 ~~~
 
-#### Alterando a senha do Postgre.
-
-Entre no Postgre com o comando `sudo -u postgres psql` e altere a senha usando `alter user postgres with encrypted password 'operador123456';`. Coloque sempre ***';'** no final para não apresentar erro. O comando **'\q'** sai do Postgre.
-
-~~~shell
-sudo -u postgres psql
-psql (16.0 (Ubuntu 16.0-1.pgdg22.04+1))
-Type "help" for help.
-
-postgres=# alter user postgres with encrypted password 'operador123456';
-ALTER ROLE
-postgres-# \q
-~~~
 
 #### Configurar o Firewall
 
@@ -293,14 +280,41 @@ operador@siscasa:~$ sudo systemctl restart postgresql.service
 operador@siscasa:~$ 
 ~~~
 
-#### Criando e acessando um banco de dados 
+#### Alterando a senha do Postgre.
+
+Entre no Postgre com o comando `sudo -u postgres psql` e altere a senha usando `alter user postgres with encrypted password 'operador123456';`. Coloque sempre ***';'** no final para não apresentar erro. O comando **'\q'** sai do Postgre.
+Depois crie um novo usuário e consigure sua senha.
 
 ~~~shell
-#entrando no postegre
-operador@siscasa:~$ sudo -u postgres psql
+sudo -u postgres psql
 psql (16.0 (Ubuntu 16.0-1.pgdg22.04+1))
 Type "help" for help.
 
+postgres=# alter user postgres with encrypted password 'operador123456';
+ALTER ROLE
+
+# criando usuário novo
+postgres=# create user operador createdb;
+CREATE ROLE
+
+# alterando a senha do usuário novo
+postgres=# alter user operador with password '123456';
+ALTER ROLE
+
+# tornando a senha válida infinitamente
+postgres=# alter user operador valid until 'infinity';
+ALTER ROLE
+
+# verificando se o usuário foi criado
+postgres=# select * from pg_user;
+~~~
+
+
+#### Criando e acessando um banco de dados 
+
+Só será possível criar um banco de dados usando o psql. Caso não tenha certesa do banco que deseja criar, siga o exemplo abaixo mas saiba que terá que acessar desta forma para criar outros banco.
+
+~~~shell
 # criando banco
 postgres=# create database cidades;
 CREATE DATABASE
@@ -323,7 +337,7 @@ cidades=# \l
            |          |          |                 |             |             |            |           | postgres=CTc/postgres
 (4 rows)
 
-cidades=#
+cidades=# \q
 ~~~
 
 Outros comando úteis:
@@ -339,3 +353,64 @@ Outros comando úteis:
 \conninfo|apresenta informações sobre a conexão atual
 \h|lista os comandos SQL
 \h comando|apresenta detalhes sobre o comando
+\q|sai do **PostgreSql**
+
+#### Configurando o acesso ao PostgreSql.
+
+~~~shell
+# Ir até a pasta com os arquivos para configuração. Perceba que a pasta **'16'** deve ser trocada caso sua versão não seja a 16 
+operador@siscasa:~$ cd /etc/postgresql/16/main/
+
+# liste os arquivos da pasta
+operador@siscasa:/etc/postgresql/16/main$ ls
+conf.d  environment  pg_ctl.conf  pg_hba.conf  pg_ident.conf  postgresql.conf  start.conf
+
+# crie um backup dos arquivos postgresql.conf e pg_hba.conf 
+operador@siscasa:/etc/postgresql/16/main$ sudo cp postgresql.conf bk_postgresql.conf 
+operador@siscasa:/etc/postgresql/16/main$ sudo cp pg_hba.conf bk_pg_hba.conf 
+
+# verifique se os backup's foram criados com sucesso
+operador@siscasa:/etc/postgresql/16/main$ ls
+bk_pg_hba.conf      conf.d       pg_ctl.conf  pg_ident.conf    start.conf
+bk_postgresql.conf  environment  pg_hba.conf  postgresql.conf
+~~~
+
+Abra o arquivo **postgresql.conf** com o comando `sudo nano postgresql.conf` e procure pela linha:
+
+`#listen_addresses = "localhost" # what IP address(es) to listen on`
+
+Retire o `#` para descomentar a linha e mude o valor para `*`. O resultado final será:
+
+`listen_addresses = "*" # what IP address(es) to listen on`
+
+
+Agora abra o arquivo **pg_hba.conf** com o comando `sudo nano pg_hba.conf` e inclua uma linha no final do arquivo com a configuração desejada podendo variar de:
+
+perfil mais permissivo, onde qualquer usuário de qualquer IP poderá se conectar a qualquer database.
+
+`host all all 0.0.0.0/0 trust`
+
+Ao perfíl mais restritivo, onde o usuário usuariodobanco poderá conectar-se apenas ao banco *bancodedados* apenas se estiver dentro da rede *192.168.0.0*.
+
+`host bancodedados usuariodobanco 192.168.0.0/32 md5`
+
+Tenha em mente que os parâmetro **trust** e **md5** são:
+
+trust => não solicita senha 
+
+md5 => solicita senha
+
+Para este exemplo foi incluido uma linha de comentário para explicitar que a configuração abaixo foi criada pelo usuário. O resultado final ficou conforme abaixo:
+
+~~~shel
+# configuracao manual
+host    all        all        0.0.0.0/0    md5
+~~~
+
+Depois de salvar e sair de cada um dos arquivos, reinicie o **PostgreSql** com o comando `sudo systemctl restart postgresql.service` 
+
+#### Como acessar o banco remotamente?
+
+Até o momento só o **PostgreSql** só foi acessado através do psql uma vez que esteja logado no servidor por uma conexão remota com ssh ou fisicamente com um acesso direto ao servidor fisicamente. É recomendado que se use o [dbeaver](https://dbeaver.io/download/) para isto. Ele é um cliente SQL multiplataforma, com versões para Linux, Windows e Mac, possibilitando o acesso e o gerenciamento de diversos bancos de dados, entre eles o **PostgreSql**. Basta realizar a instalação, abrir o programa e criar uma conexão nova informando o host, o banco de dados, o usuário e a senha.
+
+
