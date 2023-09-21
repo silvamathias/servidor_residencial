@@ -411,6 +411,8 @@ Depois de salvar e sair de cada um dos arquivos, reinicie o **PostgreSql** com o
 
 #### Como acessar o banco remotamente?
 
-Até o momento só o **PostgreSql** só foi acessado através do psql uma vez que esteja logado no servidor por uma conexão remota com ssh ou fisicamente com um acesso direto ao servidor fisicamente. É recomendado que se use o [dbeaver](https://dbeaver.io/download/) para isto. Ele é um cliente SQL multiplataforma, com versões para Linux, Windows e Mac, possibilitando o acesso e o gerenciamento de diversos bancos de dados, entre eles o **PostgreSql**. Basta realizar a instalação, abrir o programa e criar uma conexão nova informando o host, o banco de dados, o usuário e a senha.
+Até o momento só o **PostgreSql** só foi acessado através do psql uma vez que esteja logado no servidor por uma conexão remota com ssh ou fisicamente com um acesso direto ao servidor fisicamente. É recomendado que se use o [DBeaver](https://dbeaver.io/download/) para isto. 
 
+*DBeaver* é um cliente SQL multiplataforma, com versões para Linux, Windows e Mac, possibilitando o acesso e o gerenciamento de diversos bancos de dados, entre eles o **PostgreSql**. Basta realizar a instalação, abrir o programa e criar uma conexão nova informando **o host, o banco de dados, o usuário e a senha**, conforme abaixo. O campo *URL* será atualizado automaticcamente.
 
+![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
