@@ -6,10 +6,15 @@
     1.  [Introdução](#Introdução)
     2.  [Por que faser um servidor físico?](#por_que_fazer)
     3.  [Requisitos](#Requisitos) 
-2. Configurando o Servidor
+2. Instalação e Configurando o Servidor
     1. [Instalando o Linux](#Instalando_o_Linux)
         * [Pen drive bootavel](#pendrive_boot)
+    2. [Configurações Iniciais](#configuracoes_iniciais)
         * [Usando SSH](#ssh)
+        * [Habilitando o Firewall](#habilitando_firewall)
+    3. [Configurações opcionais](#configuracoes_opcionais)
+       * [Montando partições ao ligar o cervidor](#montando_particoes)
+       * [configurando tampa do Notebook](#configurando_notebook)
     2. [Atualisando o Sistema](#Atualizando_o_sistema)
     3. [Configurando IP fixo](#ip_fixo)
     4. [Instalando o SAMBA](#Instalando_o_SAMBA)
@@ -131,6 +136,13 @@ operador@siscasa:~$
 
  A linha `operador@siscasa:~$` indica que a partir de agora você está dentro do servidor onde o seu usuário é *operador* e o nome do servidor é *siscasa* que foram definidos na instalação do Ubuntu. Note também que nem sempre, ao digitar uma senha no terminal Linux, aparecerá '*' para cada tecla clicada. 
 
+<a id="configuracoes_opcionais"></a>
+
+#### Configurações opcionais
+
+#### Montando partição automaticamente ao ligar o servidor
+
+####
 
 <a id="Atualizando_o_sistema"></a>
 
@@ -236,6 +248,19 @@ root@siscasa:/etc/netplan# netplan apply
 <a id="Instalando_o_SAMBA"></a>
 
 ### 2 V Instalando o SAMBA
+
+~~~shell
+operador@siscasa:~$ sudo apt install samba
+operador@siscasa:~$ cd /etc/samba
+operador@siscasa:/etc/samba$ ls
+gdbcommands  smb.conf  tls
+operador@siscasa:/etc/samba$ cp smb.conf bk_smb.conf 
+cp: cannot create regular file 'bk_smb.conf': Permission denied
+operador@siscasa:/etc/samba$ sudo cp smb.conf bk_smb.conf 
+operador@siscasa:/etc/samba$ ls 
+bk_smb.conf  gdbcommands  smb.conf  tls
+operador@siscasa:/etc/samba$ sudo nano smb.conf 
+~~~
 
 <a id="Instalando_o_PostgreeSQL"></a>
 
