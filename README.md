@@ -3,11 +3,37 @@
 ## Sumário
 
 1. Apresentação
-    1.  [Introdução](#Introdução)
-    2.  [Por que faser um servidor físico?](#por_que_fazer)
-    3.  [Requisitos](#Requisitos) 
+    * 1.1 [Introdução](#introdução)
+    * 1.2 [Por que faser um servidor físico?](#por_que_fazer)
+    * 1.3 [Requisitos](#requisitos)
+        * 1.3.1 Sistema Operacional
+
+2. Instalando o Linux
+    * 2.1 Criando Pen drive bootavel e instalação
+    * 2.2 Atualizando o sistema
+
+3. Configurando o servidor
+### 3.1 Configurando o Firewall
+### 3.2 Configurando IP fixo
+### 3.3 Usando SSH
+### 3.4 Configurações opcionais
+#### 3.4.1 Montando partição automaticamente ao ligar o servidor
+#### 3.4.2 Configurando a tampa do Notebook
+
+## 4 Atribuindo funcionalidades
+### 4.1 Instalando o SAMBA
+### 4.2 Instalando o PostgreeSQL
+#### 4.2.1 Instalando a verção mais recente.
+#### 4.2.2 Abrindo a porta  do Firewall
+#### 4.2.3 Alterando a senha do Postgre.
+#### 4.2.4 Criando e acessando um banco de dados 
+#### 4.2.5 Configurando o acesso ao PostgreSql.
+#### 4.2.6 Como acessar o banco remotamente?
+
+## 5 Considerações finais
+### 5.1 Aprofundando conhecimento
 2. Instalação e Configurando o Servidor
-    1. [Instalando o Linux](#Instalando_o_Linux)
+    1. [Instalando o Linux](#instalando_o_Linux)
         * [Pen drive bootavel](#pendrive_boot)
     2. [Configurações Iniciais](#configuracoes_iniciais)
         * [Usando SSH](#ssh)
@@ -15,19 +41,58 @@
     3. [Configurações opcionais](#configuracoes_opcionais)
        * [Montando partições ao ligar o cervidor](#montando_particoes)
        * [configurando tampa do Notebook](#configurando_notebook)
-    2. [Atualisando o Sistema](#Atualizando_o_sistema)
+    2. [Atualisando o Sistema](#atualizando_o_sistema)
     3. [Configurando IP fixo](#ip_fixo)
-    4. [Instalando o SAMBA](#Instalando_o_SAMBA)
-    5. [Instalando o PostgreeSQL](#Instalando_o_PostgreeSQL)
+    4. [Instalando o SAMBA](#instalando_o_SAMBA)
+    5. [Instalando o PostgreeSQL](#instalando_o_PostgreeSQL)
    
 
 ## 1 Apresentação
 
-<a id="Introdução"></a>
+<a id="introdução"></a>
+
+### 1.1 Introdução
+
+<a id="por_que_fazer"></a>
+
+### 1.2 Por que fazer um servidor físico?
+
+<a id="requisitos"></a>
+
+### 1.3 Requisitos
+
+### 1.3.1 Sistema Operacional
+
+## 2 Instalando o Linux
+### 2.1 Criando Pen drive bootavel e instalação
+### 2.2 Atualizando o sistema
+
+## 3 Configurando o servidor
+### 3.1 Configurando o Firewall
+### 3.2 Configurando IP fixo
+### 3.3 Usando SSH
+### 3.4 Configurações opcionais
+#### 3.4.1 Montando partição automaticamente ao ligar o servidor
+#### 3.4.2 Configurando a tampa do Notebook
+
+## 4 Atribuindo funcionalidades
+### 4.1 Instalando o SAMBA
+### 4.2 Instalando o PostgreeSQL
+#### 4.2.1 Instalando a verção mais recente.
+#### 4.2.2 Abrindo a porta  do Firewall
+#### 4.2.3 Alterando a senha do Postgre.
+#### 4.2.4 Criando e acessando um banco de dados 
+#### 4.2.5 Configurando o acesso ao PostgreSql.
+#### 4.2.6 Como acessar o banco remotamente?
+
+## 5 Considerações finais
+### 5.1 Aprofundando conhecimento
+
+## 1 Apresentação
 
 ## 1 I Introdução
 
-<a id="por_que_fazer"></a>
+
 
 ## 1 II Por que faser um servidor físico?
 
@@ -59,6 +124,27 @@ Este início é igual para qualquer distribuição linux, Você vai presisar bai
 * YUMI  (foi o primeiro que usei e é muito fácil de usar).
 
 . Feito isto, ligue o computador com o pen drive já conectado na porta USB e entre na tela de opção de boot, geralmente apertando a tecla *F8*, selecione o pen drive que está a imagem ISO e confirme para abrir o assistente de instalação. É recomendado usar uma verção própria para servidores. o Ubuntu Server possui um assistente de instalação diferente das distros voltadas para uso pessoal. Como não possui interface gráfica a instalação é feita toda em modo texto porém o que é preciso fazer aparece em etapas na tela onde deve-se apenas escolher as opções usando as setas, marcar opções usando a tecla espaço e confirmar precionando enter. Ao final do processo seu sistema estará instalado. Caso tenha difivuldades pode optar por uma versão com interface gráfica mas é extremamente recomendado que seja uma versão LTS.
+
+
+#### Configurar o Firewall
+
+~~~shell
+#Ative o ufw
+operador@siscasa:~$ sudo ufw enable
+[sudo] password for operador: 
+Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
+Firewall is active and enabled on system startup
+
+#liberar o firewall para o postgre:
+operador@siscasa:~$ sudo ufw allow postgresql
+Rule added
+Rule added (v6)
+
+#reinicie o serviço postgre:
+operador@siscasa:~$ sudo systemctl restart postgresql.service 
+operador@siscasa:~$ 
+~~~
+
 
 <a id="ssh"></a>
 
