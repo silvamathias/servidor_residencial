@@ -6,46 +6,33 @@
     * 1.1 [Introdução](#introdução)
     * 1.2 [Por que faser um servidor físico?](#por_que_fazer)
     * 1.3 [Requisitos](#requisitos)
-        * 1.3.1 Sistema Operacional
+        * 1.3.1 [Sistema Operacional](#sys_operacional)
 
 2. Instalando o Linux
-    * 2.1 Criando Pen drive bootavel e instalação
-    * 2.2 Atualizando o sistema
+    * 2.1 [Criando Pen drive bootavel e instalação](#criando_pendrive)
+    * 2.2 [Atualizando o sistema](#atu_sys)
 
 3. Configurando o servidor
-### 3.1 Configurando o Firewall
-### 3.2 Configurando IP fixo
-### 3.3 Usando SSH
-### 3.4 Configurações opcionais
-#### 3.4.1 Montando partição automaticamente ao ligar o servidor
-#### 3.4.2 Configurando a tampa do Notebook
+   * 3.1 [Configurando o Firewall](#configurando_firewall)
+   * 3.2 [Configurando IP fixo](#configurando_ip_fixo)
+   * 3.3 [Usando SSH](#ssh)
+   * 3.4 [Configurações opcionais](#configuracoes_especiais)
+      * 3.4.1 [Montando partição automaticamente ao ligar o servidor](#montando_particao)
+      * 3.4.2 [Configurando a tampa do Notebook](#tampa_notebook)
 
-## 4 Atribuindo funcionalidades
-### 4.1 Instalando o SAMBA
-### 4.2 Instalando o PostgreeSQL
-#### 4.2.1 Instalando a verção mais recente.
-#### 4.2.2 Abrindo a porta  do Firewall
-#### 4.2.3 Alterando a senha do Postgre.
-#### 4.2.4 Criando e acessando um banco de dados 
-#### 4.2.5 Configurando o acesso ao PostgreSql.
-#### 4.2.6 Como acessar o banco remotamente?
+4. Atribuindo funcionalidades
+   * 4.1 Instalando o SAMBA
+   * 4.2 Instalando o PostgreeSQL
+      * 4.2.1 Instalando a verção mais recente
+      * 4.2.2 Abrindo a porta  do Firewall
+      * 4.2.3 Alterando a senha do Postgre
+      * 4.2.4 Criando e acessando um banco de dados
+      * 4.2.5 Configurando o acesso ao PostgreSql
+      * 4.2.6 Como acessar o banco remotamente
 
-## 5 Considerações finais
-### 5.1 Aprofundando conhecimento
-2. Instalação e Configurando o Servidor
-    1. [Instalando o Linux](#instalando_o_Linux)
-        * [Pen drive bootavel](#pendrive_boot)
-    2. [Configurações Iniciais](#configuracoes_iniciais)
-        * [Usando SSH](#ssh)
-        * [Habilitando o Firewall](#habilitando_firewall)
-    3. [Configurações opcionais](#configuracoes_opcionais)
-       * [Montando partições ao ligar o cervidor](#montando_particoes)
-       * [configurando tampa do Notebook](#configurando_notebook)
-    2. [Atualisando o Sistema](#atualizando_o_sistema)
-    3. [Configurando IP fixo](#ip_fixo)
-    4. [Instalando o SAMBA](#instalando_o_SAMBA)
-    5. [Instalando o PostgreeSQL](#instalando_o_PostgreeSQL)
-   
+5. Considerações finais
+   * 5.1 Aprofundando conhecimento
+
 
 ## 1 Apresentação
 
@@ -61,18 +48,44 @@
 
 ### 1.3 Requisitos
 
+<a id="sys_operacional"></a>
+
 ### 1.3.1 Sistema Operacional
 
 ## 2 Instalando o Linux
+
+<a id="criando_pendrive"></a>
+
 ### 2.1 Criando Pen drive bootavel e instalação
+
+<a id="atu_sys"></a>
+
 ### 2.2 Atualizando o sistema
 
 ## 3 Configurando o servidor
+
+<a id="configurando_firewall"></a>
+
 ### 3.1 Configurando o Firewall
+
+<a id="configurando_ip_fixo"></a>
+
 ### 3.2 Configurando IP fixo
+
+<a id="ssh"></a>
+
 ### 3.3 Usando SSH
+
+<a id="configuracoes_especiais"></a>
+
 ### 3.4 Configurações opcionais
+
+<a id="montando_particao"></a>
+
 #### 3.4.1 Montando partição automaticamente ao ligar o servidor
+
+<a id="tampa_notebook"></a>
+
 #### 3.4.2 Configurando a tampa do Notebook
 
 ## 4 Atribuindo funcionalidades
