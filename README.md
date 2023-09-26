@@ -3,7 +3,7 @@
 ## Sumário
 
 1. Apresentação
-    * 1.1 [Introdução](#introdução)
+    * 1.1 [Introdução](#introducao)
     * 1.2 [Por que faser um servidor físico?](#por_que_fazer)
     * 1.3 [Requisitos](#requisitos)
         * 1.3.1 [Sistema Operacional](#sys_operacional)
@@ -21,22 +21,24 @@
       * 3.4.2 [Configurando a tampa do Notebook](#tampa_notebook)
 
 4. Atribuindo funcionalidades
-   * 4.1 Instalando o SAMBA
-   * 4.2 Instalando o PostgreeSQL
-      * 4.2.1 Instalando a verção mais recente
-      * 4.2.2 Abrindo a porta  do Firewall
-      * 4.2.3 Alterando a senha do Postgre
-      * 4.2.4 Criando e acessando um banco de dados
-      * 4.2.5 Configurando o acesso ao PostgreSql
-      * 4.2.6 Como acessar o banco remotamente
+   * 4.1 [Instalando o SAMBA](#samba)
+      * 4.1.1 [Acessando de uma máquina Windows](#acesso_samba_windows)
+      * 4.1.2 [Acessando de uma máquina Linux](#acesso_samba_linux)
+   * 4.2 [Instalando o PostgreeSQL](#instalando_postgre)
+      * 4.2.1 [Instalando a verção mais recente](#Instalando_mais_atual)
+      * 4.2.2 [Habilitando a porta  do Firewall](#habilitando_firewall)
+      * 4.2.3 [Alterando a senha do Postgre](#alterando_senha_postgre)
+      * 4.2.4 [Criando e acessando um banco de dados](#criando_e_acessando_bd)
+      * 4.2.5 [Configurando o acesso ao PostgreSql](#configurando_acesso_postgre)
+      * 4.2.6 [Como acessar o banco remotamente](#acesso_remoto_postgre)
 
 5. Considerações finais
-   * 5.1 Aprofundando conhecimento
+   * 5.1 [Aprofundando conhecimento](#aprofundando_conhecimento)
 
 
 ## 1 Apresentação
 
-<a id="introdução"></a>
+<a id="introducao"></a>
 
 ### 1.1 Introdução
 
@@ -52,82 +54,13 @@
 
 ### 1.3.1 Sistema Operacional
 
+As distribuições **Linux** maiis comuns em servidores são Ubuntu, Debian, SUSE, Fedora, Red Hat, CentOS
+
 ## 2 Instalando o Linux
 
 <a id="criando_pendrive"></a>
 
 ### 2.1 Criando Pen drive bootavel e instalação
-
-<a id="atu_sys"></a>
-
-### 2.2 Atualizando o sistema
-
-## 3 Configurando o servidor
-
-<a id="configurando_firewall"></a>
-
-### 3.1 Configurando o Firewall
-
-<a id="configurando_ip_fixo"></a>
-
-### 3.2 Configurando IP fixo
-
-<a id="ssh"></a>
-
-### 3.3 Usando SSH
-
-<a id="configuracoes_especiais"></a>
-
-### 3.4 Configurações opcionais
-
-<a id="montando_particao"></a>
-
-#### 3.4.1 Montando partição automaticamente ao ligar o servidor
-
-<a id="tampa_notebook"></a>
-
-#### 3.4.2 Configurando a tampa do Notebook
-
-## 4 Atribuindo funcionalidades
-### 4.1 Instalando o SAMBA
-### 4.2 Instalando o PostgreeSQL
-#### 4.2.1 Instalando a verção mais recente.
-#### 4.2.2 Abrindo a porta  do Firewall
-#### 4.2.3 Alterando a senha do Postgre.
-#### 4.2.4 Criando e acessando um banco de dados 
-#### 4.2.5 Configurando o acesso ao PostgreSql.
-#### 4.2.6 Como acessar o banco remotamente?
-
-## 5 Considerações finais
-### 5.1 Aprofundando conhecimento
-
-## 1 Apresentação
-
-## 1 I Introdução
-
-
-
-## 1 II Por que faser um servidor físico?
-
-<a id="Requisitos"></a>
-
-## 1 III Requisitos
-
-#### Sistema Operacional
-
-As distribuições **Linux** maiis comuns em servidores são Ubuntu, Debian, SUSE, Fedora, Red Hat, CentOS
-
-## 2 Configurando o Servidor
-
-<a id="Instalando_o_Linux"></a>
-
-### 2 I Instalando o Linux
-
-
-
-<a id="pendrive_boot"></a>
-
-#### Pen drive bootavel
 
 Este início é igual para qualquer distribuição linux, Você vai presisar baixar a imagem ISO do site da Ubuntu e criar um pen drive com esta imagem usando um dos programas abaixo:
 
@@ -138,8 +71,26 @@ Este início é igual para qualquer distribuição linux, Você vai presisar bai
 
 . Feito isto, ligue o computador com o pen drive já conectado na porta USB e entre na tela de opção de boot, geralmente apertando a tecla *F8*, selecione o pen drive que está a imagem ISO e confirme para abrir o assistente de instalação. É recomendado usar uma verção própria para servidores. o Ubuntu Server possui um assistente de instalação diferente das distros voltadas para uso pessoal. Como não possui interface gráfica a instalação é feita toda em modo texto porém o que é preciso fazer aparece em etapas na tela onde deve-se apenas escolher as opções usando as setas, marcar opções usando a tecla espaço e confirmar precionando enter. Ao final do processo seu sistema estará instalado. Caso tenha difivuldades pode optar por uma versão com interface gráfica mas é extremamente recomendado que seja uma versão LTS.
 
+<a id="atu_sys"></a>
 
-#### Configurar o Firewall
+### 2.2 Atualizando o sistema
+
+`sudo -i`
+`apt update`
+
+~~~shell
+operador@siscasa:~$ sudo -i
+[sudo] password for operador: 
+root@siscasa:~# apt update
+~~~
+
+`apt upgrade`
+
+## 3 Configurando o servidor
+
+<a id="configurando_firewall"></a>
+
+### 3.1 Configurando o Firewall
 
 ~~~shell
 #Ative o ufw
@@ -158,18 +109,11 @@ operador@siscasa:~$ sudo systemctl restart postgresql.service
 operador@siscasa:~$ 
 ~~~
 
+<a id="configurando_ip_fixo"></a>
 
-<a id="ssh"></a>
+### 3.2 Configurando IP fixo
 
-#### Usando SSH
-
-O Ubuntu server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use os comandos:
-
-* `sudo apt install opensh-server` para instalar o programa; 
-* `sudo service ssh start` para iniciar o serviço;
-* `ps aux | grep ssh` para testar o programa.
-
-A chave SSH usa o IP para se conectar. Durante a instalação esta informação é mostrada na etapa que configura a internet. caso não tenha anotado use o comando `ip a` . Será mostrado uma sequencia de números iniciando com 192.168 e seguida de mais dois grupos de dígitos separados por ponto.
+Com o comando `ip a` é possível decobrir o nome da placa de rede usada e que neste exemplo é **enp3s0**
 
 ~~~shell
 operador@siscasa:~$ ip a
@@ -179,92 +123,6 @@ operador@siscasa:~$ ip a
        valid_lft forever preferred_lft forever
     inet6 ::1/128 scope host
        valid_lft forever preferred_lft forever
-2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 48:5b:39:ce:f1:c5 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.0.78/24 metric 100 brd 192.168.0.255 scope global dynamic enp3s0
-       valid_lft 2564sec preferred_lft 2564sec
-    inet6 2804:14d:5c20:9479:4a5b:39ff:fece:f1c5/64 scope global dynamic mngtmpaddr noprefixroute
-       valid_lft 3600sec preferred_lft 3600sec
-    inet6 fe80::4a5b:39ff:fece:f1c5/64 scope link
-       valid_lft forever preferred_lft forever
-~~~
-
-No código acima é possível ver o retorno do comando `ip a` informando o ip do servidor como sendo **192.168.0.78**
-
-Com estas informações já é possivel acessar o servidor usando o SSH mas é possivel seguir com a configuração diretamente no servidor ou então pode  desligá-lo; colocá-lo ao lado do seu roteador de internet; conectá-los usando um cabo de rede e ligar o PC novamente sem monitor ou teclado.
-
-De um outro computador, abra o terminal se for um Linux e escreva *sudo ssh nome_do_usuário@ip*, caso seja Windows, abra o CMD ou o Powershell e escreva a mesma coisa mas sem usar o sudo.
-
-~~~shell
-ph@A320:~$ sudo ssh operador@192.168.0.78
-The authenticity of host '192.168.0.78 (192.168.0.78)' can't be established.
-ECDSA key fingerprint is SHA256:+lySxZ6u2RtnXtoQ9Oo1rHZ5c/feCiaQcuO8iNgLqj8.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added '192.168.0.78' (ECDSA) to the list of known hosts.
-operador@192.168.0.78's password: 
-Welcome to Ubuntu 22.04 LTS (GNU/Linux 5.15.0-43-generic x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-  System information as of dom 07 ago 2022 01:40:51 UTC
-
-  System load:             0.0
-  Usage of /:              14.0% of 48.91GB
-  Memory usage:            3%
-  Swap usage:              0%
-  Processes:               125
-  Users logged in:         0
-  IPv4 address for enp3s0: 192.168.0.78
-  IPv6 address for enp3s0: 2804:14d:5c9d:8162::1f46
-  IPv6 address for enp3s0: 2804:14d:5c9d:8162:4a5b:39ff:fece:f1c5
-
- * Super-optimized for small spaces - read how we shrank the memory
-   footprint of MicroK8s to make it the smallest full K8s around.
-
-   https://ubuntu.com/blog/microk8s-memory-optimisation
-
-34 updates can be applied immediately.
-To see these additional updates run: apt list --upgradable
-
-
-Last login: Sat Aug  6 17:33:09 2022
-operador@siscasa:~$ 
-~~~
-
- A linha `operador@siscasa:~$` indica que a partir de agora você está dentro do servidor onde o seu usuário é *operador* e o nome do servidor é *siscasa* que foram definidos na instalação do Ubuntu. Note também que nem sempre, ao digitar uma senha no terminal Linux, aparecerá '*' para cada tecla clicada. 
-
-<a id="configuracoes_opcionais"></a>
-
-#### Configurações opcionais
-
-#### Montando partição automaticamente ao ligar o servidor
-
-####
-
-<a id="Atualizando_o_sistema"></a>
-
-### 2 II Atualizando o sistema
-
-
-`sudo -i`
-`apt update`
-
-~~~shell
-operador@siscasa:~$ sudo -i
-[sudo] password for operador: 
-root@siscasa:~# apt update
-~~~
-
-`apt upgrade`
-
-<a id="ip_fixo"></a>
-
-### 2 III Configurando IP fixo
-
-Voltando ao resultado do comando `ip a`, além do ip atual, é possível decobrir o nome da placa de rede que, neste exemplo é **enp3s0**
-~~~shell
 2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 48:5b:39:ce:f1:c5 brd ff:ff:ff:ff:ff:ff
     inet 192.168.0.78/24 metric 100 brd 192.168.0.255 scope global dynamic enp3s0
@@ -344,9 +202,99 @@ Configuration accepted.
 root@siscasa:/etc/netplan# netplan apply
 ~~~
 
-<a id="Instalando_o_SAMBA"></a>
+<a id="ssh"></a>
 
-### 2 V Instalando o SAMBA
+### 3.3 Usando SSH
+
+O Ubuntu server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use os comandos:
+
+* `sudo apt install opensh-server` para instalar o programa; 
+* `sudo service ssh start` para iniciar o serviço;
+* `ps aux | grep ssh` para testar o programa.
+
+A chave SSH usa o IP para se conectar. Durante a instalação esta informação é mostrada na etapa que configura a internet. caso não tenha anotado use o comando `ip a` . Será mostrado uma sequencia de números iniciando com 192.168 e seguida de mais dois grupos de dígitos separados por ponto.
+
+~~~shell
+operador@siscasa:~$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 48:5b:39:ce:f1:c5 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.78/24 metric 100 brd 192.168.0.255 scope global dynamic enp3s0
+       valid_lft 2564sec preferred_lft 2564sec
+    inet6 2804:14d:5c20:9479:4a5b:39ff:fece:f1c5/64 scope global dynamic mngtmpaddr noprefixroute
+       valid_lft 3600sec preferred_lft 3600sec
+    inet6 fe80::4a5b:39ff:fece:f1c5/64 scope link
+       valid_lft forever preferred_lft forever
+~~~
+
+No código acima é possível ver o retorno do comando `ip a` informando o ip do servidor como sendo **192.168.0.78**
+
+Com estas informações já é possivel acessar o servidor usando o SSH mas é possivel seguir com a configuração diretamente no servidor ou então pode  desligá-lo; colocá-lo ao lado do seu roteador de internet; conectá-los usando um cabo de rede e ligar o PC novamente sem monitor ou teclado.
+
+De um outro computador, abra o terminal se for um Linux e escreva *sudo ssh nome_do_usuário@ip*, caso seja Windows, abra o CMD ou o Powershell e escreva a mesma coisa mas sem usar o sudo.
+
+~~~shell
+ph@A320:~$ sudo ssh operador@192.168.0.78
+The authenticity of host '192.168.0.78 (192.168.0.78)' can't be established.
+ECDSA key fingerprint is SHA256:+lySxZ6u2RtnXtoQ9Oo1rHZ5c/feCiaQcuO8iNgLqj8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.0.78' (ECDSA) to the list of known hosts.
+operador@192.168.0.78's password: 
+Welcome to Ubuntu 22.04 LTS (GNU/Linux 5.15.0-43-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of dom 07 ago 2022 01:40:51 UTC
+
+  System load:             0.0
+  Usage of /:              14.0% of 48.91GB
+  Memory usage:            3%
+  Swap usage:              0%
+  Processes:               125
+  Users logged in:         0
+  IPv4 address for enp3s0: 192.168.0.78
+  IPv6 address for enp3s0: 2804:14d:5c9d:8162::1f46
+  IPv6 address for enp3s0: 2804:14d:5c9d:8162:4a5b:39ff:fece:f1c5
+
+ * Super-optimized for small spaces - read how we shrank the memory
+   footprint of MicroK8s to make it the smallest full K8s around.
+
+   https://ubuntu.com/blog/microk8s-memory-optimisation
+
+34 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+
+Last login: Sat Aug  6 17:33:09 2022
+operador@siscasa:~$ 
+~~~
+
+ A linha `operador@siscasa:~$` indica que a partir de agora você está dentro do servidor onde o seu usuário é *operador* e o nome do servidor é *siscasa* que foram definidos na instalação do Ubuntu. Note também que nem sempre, ao digitar uma senha no terminal Linux, aparecerá '*' para cada tecla clicada. 
+
+<a id="configuracoes_especiais"></a>
+
+### 3.4 Configurações opcionais
+
+<a id="montando_particao"></a>
+
+#### 3.4.1 Montando partição automaticamente ao ligar o servidor
+
+<a id="tampa_notebook"></a>
+
+#### 3.4.2 Configurando a tampa do Notebook
+
+## 4 Atribuindo funcionalidades
+
+<a id="samba"></a>
+
+### 4.1 Instalando o SAMBA
 
 ~~~shell
 operador@siscasa:~$ sudo apt install samba
@@ -361,11 +309,21 @@ bk_smb.conf  gdbcommands  smb.conf  tls
 operador@siscasa:/etc/samba$ sudo nano smb.conf 
 ~~~
 
-<a id="Instalando_o_PostgreeSQL"></a>
+<a id="acesso_samba_windows"></a>
 
-### 2 VI Instalando o PostgreeSQL
+#### 4.1.1 Acessando de uma máquina Windows
 
-#### Instalando a verção mais recente.
+<a id="acesso_samba_linux"></a>
+
+#### 4.1.2 Acessando de uma máquina Linux
+
+<a id="instalando_postgre"></a>
+
+### 4.2 Instalando o PostgreeSQL
+
+<a id="Instalando_mais_atual"></a>
+
+#### 4.2.1 Instalando a verção mais recente
 
 O código abaixo consta no site do [PostgreSql](https://www.postgresql.org/download/linux/ubuntu/). Funcionou copiando e colando no terminal linha a linha.
 
@@ -384,16 +342,11 @@ sudo apt-get update
 sudo apt-get -y install postgresql
 ~~~
 
+<a id="habilitando_firewall"></a>
 
-#### Configurar o Firewall
+#### 4.2.2 Habilitando a porta  do Firewall
 
 ~~~shell
-#Ative o ufw
-operador@siscasa:~$ sudo ufw enable
-[sudo] password for operador: 
-Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
-Firewall is active and enabled on system startup
-
 #liberar o firewall para o postgre:
 operador@siscasa:~$ sudo ufw allow postgresql
 Rule added
@@ -401,10 +354,11 @@ Rule added (v6)
 
 #reinicie o serviço postgre:
 operador@siscasa:~$ sudo systemctl restart postgresql.service 
-operador@siscasa:~$ 
 ~~~
 
-#### Alterando a senha do Postgre.
+<a id="alterando_senha_postgre"></a>
+
+#### 4.2.3 Alterando a senha do Postgre
 
 Entre no Postgre com o comando `sudo -u postgres psql` e altere a senha usando `alter user postgres with encrypted password 'operador123456';`. Coloque sempre ***';'** no final para não apresentar erro. O comando **'\q'** sai do Postgre.
 Depois crie um novo usuário e consigure sua senha.
@@ -433,8 +387,9 @@ ALTER ROLE
 postgres=# select * from pg_user;
 ~~~
 
+<a id="criando_e_acessando_bd"></a>
 
-#### Criando e acessando um banco de dados 
+#### 4.2.4 Criando e acessando um banco de dados
 
 Só será possível criar um banco de dados usando o psql. Caso não tenha certesa do banco que deseja criar, siga o exemplo abaixo mas saiba que terá que acessar desta forma para criar outros banco.
 
@@ -479,7 +434,9 @@ Outros comando úteis:
 \h comando|apresenta detalhes sobre o comando
 \q|sai do **PostgreSql**
 
-#### Configurando o acesso ao PostgreSql.
+<a id="configurando_acesso_postgre"></a>
+
+#### 4.2.5 Configurando o acesso ao PostgreSql
 
 ~~~shell
 # Ir até a pasta com os arquivos para configuração. Perceba que a pasta **'16'** deve ser trocada caso sua versão não seja a 16 
@@ -533,10 +490,18 @@ host    all        all        0.0.0.0/0    md5
 
 Depois de salvar e sair de cada um dos arquivos, reinicie o **PostgreSql** com o comando `sudo systemctl restart postgresql.service` 
 
-#### Como acessar o banco remotamente?
+<a id="acesso_remoto_postgre"></a>
+
+#### 4.2.6 Acessando o banco remotamente?
 
 Até o momento só o **PostgreSql** só foi acessado através do psql uma vez que esteja logado no servidor por uma conexão remota com ssh ou fisicamente com um acesso direto ao servidor fisicamente. É recomendado que se use o [DBeaver](https://dbeaver.io/download/) para isto. 
 
 *DBeaver* é um cliente SQL multiplataforma, com versões para Linux, Windows e Mac, possibilitando o acesso e o gerenciamento de diversos bancos de dados, entre eles o **PostgreSql**. Basta realizar a instalação, abrir o programa e criar uma conexão nova informando **o host, o banco de dados, o usuário e a senha**, conforme abaixo. O campo *URL* será atualizado automaticcamente.
 
 ![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+
+## 5 Considerações finais
+
+<a id="aprofundando_conhecimento"></a>
+
+### 5.1 Aprofundando conhecimento
