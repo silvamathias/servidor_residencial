@@ -286,9 +286,94 @@ operador@siscasa:~$
 
 #### 3.4.1 Montando partição automaticamente ao ligar o servidor
 
+~~~shell
+operador@siscasa:/$ lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+loop0    7:0    0  63,5M  1 loop /snap/core20/2015
+loop1    7:1    0 111,9M  1 loop /snap/lxd/24322
+loop2    7:2    0   103M  1 loop /snap/lxd/23541
+loop3    7:3    0  49,6M  1 loop /snap/snapd/17883
+loop4    7:4    0  40,8M  1 loop /snap/snapd/20092
+loop5    7:5    0  63,2M  1 loop /snap/core20/1695
+sda      8:0    0 111,8G  0 disk 
+├─sda1   8:1    0     1M  0 part 
+├─sda2   8:2    0    50G  0 part /
+├─sda3   8:3    0    10G  0 part [SWAP]
+└─sda4   8:4    0    51G  0 part 
+operador@siscasa:/$ cd /
+operador@siscasa:/$ ls
+bin   dev  home  lib32  libx32      media  opt   root  sbin  srv       sys  usr
+boot  etc  lib   lib64  lost+found  mnt    proc  run   snap  swap.img  tmp  var
+operador@siscasa:/$ cd media
+operador@siscasa:/media$ ls
+operador@siscasa:/media$ mkdir sda4
+mkdir: cannot create directory ‘sda4’: Permission denied
+operador@siscasa:/media$ sudo mkdir sda4
+operador@siscasa:/media$ ls
+sda4
+operador@siscasa:/media$ sudo mount /dev/sda4 /media/sda4
+operador@siscasa:/media$ cd sda4
+operador@siscasa:/media/sda4$ ls
+lost+found
+~~~
+
+/dev/sda4	/media/sda4	ext4	user,auto,rw,exec	0	0
+
+~~~shell
+operador@siscasa:/media/sda4$ lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+loop0    7:0    0  63,5M  1 loop /snap/core20/2015
+loop1    7:1    0 111,9M  1 loop /snap/lxd/24322
+loop2    7:2    0   103M  1 loop /snap/lxd/23541
+loop3    7:3    0  49,6M  1 loop /snap/snapd/17883
+loop4    7:4    0  40,8M  1 loop /snap/snapd/20092
+loop5    7:5    0  63,2M  1 loop /snap/core20/1695
+sda      8:0    0 111,8G  0 disk 
+├─sda1   8:1    0     1M  0 part 
+├─sda2   8:2    0    50G  0 part /
+├─sda3   8:3    0    10G  0 part [SWAP]
+└─sda4   8:4    0    51G  0 part /media/sda4
+operador@siscasa:/media/sda4$ sudo nano /etc/fstab
+operador@siscasa:/media/sda4$ cd ..
+operador@siscasa:/media$ ls
+sda4
+operador@siscasa:/media$ ls -l
+total 4
+drwxr-xr-x 3 root root 4096 ago  6  2022 sda4
+operador@siscasa:/media$ sudo chown -R operador:operador /media/sda4
+operador@siscasa:/media$ ls -l
+total 4
+drwxr-xr-x 3 operador operador 4096 ago  6  2022 sda4
+operador@siscasa:/media$ cd sda4/
+operador@siscasa:/media/sda4$ mkdir samba
+operador@siscasa:/media/sda4$ ls
+lost+found  samba
+
+~~~
+
+
 <a id="tampa_notebook"></a>
 
 #### 3.4.2 Configurando a tampa do Notebook
+
+~~~shell
+operador@siscasa:/media/sda4/samba$ cd /etc/systemd/
+operador@siscasa:/etc/systemd$ cp logind.conf bk_logind.conf 
+cp: cannot create regular file 'bk_logind.conf': Permission denied
+operador@siscasa:/etc/systemd$ sudo cp logind.conf bk_logind.conf 
+[sudo] password for operador: 
+operador@siscasa:/etc/systemd$ ls
+bk_logind.conf  network        resolved.conf  system.conf     user.conf
+journald.conf   networkd.conf  sleep.conf     timesyncd.conf
+logind.conf     pstore.conf    system         user
+operador@siscasa:/etc/systemd$ sudo nano logind.conf 
+operador@siscasa:/etc/systemd$ cat logind.conf | grep HandleLidSwitch
+HandleLidSwitch=ignore
+#HandleLidSwitchExternalPower=suspend
+#HandleLidSwitchDocked=ignore
+operador@siscasa:/etc/systemd$ systemctl restart systemd-logind.service
+
+~~~
 
 ## 4 Atribuindo funcionalidades
 
