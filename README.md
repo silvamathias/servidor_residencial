@@ -317,6 +317,15 @@ operador@siscasa:/media/sda4$ ls
 lost+found
 ~~~
 
+Neste exemplo 	(coluna 1) é montada a partição sda4 que está em /dev/sda4;
+			(coluna 2) na pasta /mnt/sda4, onde mnt (abreviação de mount) é uma pasta padrão do 
+					linux destinada a montagem de partições pelo usuário;
+			(coluna 3) de formato automático;
+			(coluna 4) montado de forma automática ao ligar o pc (auto) e com permição para 
+					rodar executáveis (exec)
+			(coluna 5) que não faz Dump (0);
+			(coluna 6) que não faz verificação e reparo (0).
+
 /dev/sda4	/media/sda4	ext4	user,auto,rw,exec	0	0
 
 ~~~shell
@@ -394,6 +403,31 @@ bk_smb.conf  gdbcommands  smb.conf  tls
 operador@siscasa:/etc/samba$ sudo nano smb.conf 
 ~~~
 
+[sambashare]
+    comment = Samba on Ubuntu
+    path = /media/sda4/samba
+    read only = no
+    browsable = yes
+
+~~~shell
+operador@siscasa:~$ cd /etc/samba/
+operador@siscasa:/etc/samba$ ls
+bk_smb.conf  gdbcommands  smb.conf  tls
+operador@siscasa:/etc/samba$ sudo nano smb.conf 
+[sudo] password for operador: 
+operador@siscasa:/etc/samba$ sudo service smbd restart 
+[sudo] password for operador: 
+operador@siscasa:/etc/samba$ sudo ufw allow samba
+Rule added
+Rule added (v6)
+operador@siscasa:/etc/samba$ 
+operador@siscasa:/etc/samba$ sudo smbpasswd -a operador
+New SMB password:
+Retype new SMB password:
+Added user operador.
+operador@siscasa:/etc/samba$ systemctl status smbd
+~~~
+
 <a id="acesso_samba_windows"></a>
 
 #### 4.1.1 Acessando de uma máquina Windows
@@ -401,6 +435,18 @@ operador@siscasa:/etc/samba$ sudo nano smb.conf
 <a id="acesso_samba_linux"></a>
 
 #### 4.1.2 Acessando de uma máquina Linux
+
+no Nautilus clique Ctrl + l. No Thunar já aparece a barra de pesquisa
+na barra que aparecer escreva:
+
+smb://IP/pasta/
+
+Onde pasta é a pasta que deu nome lá no arquivo de configuração do samba (neste caso, 'sambashare' é o nome da pasta)
+como o IP cadastrado foi: 192.168.0.101 , então ficaria:
+
+smb://192.168.0.101/sambashare/
+
+depois, coloque o usuário e a senha 
 
 <a id="instalando_postgre"></a>
 
