@@ -11,7 +11,8 @@
 2. Instalando o Linux
     * 2.1 [Criando Pen drive bootavel e instalação](#criando_pendrive)
     * 2.2 [Atualizando o sistema](#atu_sys)
-
+    * 2.3 [Comandos básicos](#comandos_basicos)
+    * 
 3. Configurando o servidor
    * 3.1 [Configurando o Firewall](#configurando_firewall)
    * 3.2 [Configurando IP fixo](#configurando_ip_fixo)
@@ -85,6 +86,10 @@ root@siscasa:~# apt update
 ~~~
 
 `apt upgrade`
+
+<a id="comandos_basicos"></a>
+
+### 2.3 Comando Básicos
 
 ## 3 Configurando o servidor
 
@@ -442,13 +447,17 @@ neste exemplo ficou como:
 
 \\192.168.0.101\sambashare
 
+![Exemplo de uso e configuração samba com Windows #1](https://github.com/silvamathias/servidor_residencial/blob/main/media/samba_win/samba_win_1.png)
+
 Insira o usuário e a senha
 
 clique com o botã odireito e selecione a opção *Mapear Unidadew de Rede*
 
-![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+![Exemplo de uso e configuração samba com Windows #2](https://github.com/silvamathias/servidor_residencial/blob/main/media/samba_win/samba_win_2.png)
 
 faça as altyerações que julgar necessárias e clique em *OK*
+
+![Exemplo de uso e configuração samba com Windows #3](https://github.com/silvamathias/servidor_residencial/blob/main/media/samba_win/samba_win_3.png)
 
 <a id="acesso_samba_linux"></a>
 
@@ -463,15 +472,15 @@ como o IP cadastrado foi: 192.168.0.101 , então ficaria:
 
 smb://192.168.0.101/sambashare/
 
-![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+![Exemplo de uso e configuração samba com Linux #1](https://github.com/silvamathias/servidor_residencial/blob/main/media/samba_linux/samba_linux_1.png)
 
 depois, coloque o usuário e a senha 
 
-![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+![Exemplo de uso e configuração samba com Linux #2](https://github.com/silvamathias/servidor_residencial/blob/main/media/samba_linux/samba_linux_2.png)
 
 Por fim clique com o botão direito encima da partição do lado esquerdo e selecione Adicionar marcador. Caso não apareça esta opção verifique se a mesma está dentro de  algum outro item ou com outro nome
 
-![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+![Exemplo de uso e configuração samba com Linux #3](https://github.com/silvamathias/servidor_residencial/blob/main/media/samba_linux/samba_linux_3.png)
 
 <a id="instalando_postgre"></a>
 
@@ -654,7 +663,7 @@ Até o momento só o **PostgreSql** só foi acessado através do psql uma vez qu
 
 *DBeaver* é um cliente SQL multiplataforma, com versões para Linux, Windows e Mac, possibilitando o acesso e o gerenciamento de diversos bancos de dados, entre eles o **PostgreSql**. Basta realizar a instalação, abrir o programa e criar uma conexão nova informando **o host, o banco de dados, o usuário e a senha**, conforme abaixo. O campo *URL* será atualizado automaticcamente.
 
-![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/postgre/conexao_postgre.png)
 
 ## 5 Considerações finais
 
