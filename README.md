@@ -54,7 +54,7 @@
 
 ### 1.3.1 Sistema Operacional
 
-As distribuições **Linux** maiis comuns em servidores são Ubuntu, Debian, SUSE, Fedora, Red Hat, CentOS
+As distribuições **Linux** mais comuns em servidores são Ubuntu, Debian, SUSE, Fedora, Red Hat, CentOS
 
 ## 2 Instalando o Linux
 
@@ -79,7 +79,7 @@ Este início é igual para qualquer distribuição linux, Você vai presisar bai
 `apt update`
 
 ~~~shell
-operador@siscasa:~$ sudo -i
+$ sudo -i
 [sudo] password for operador: 
 root@siscasa:~# apt update
 ~~~
@@ -94,19 +94,19 @@ root@siscasa:~# apt update
 
 ~~~shell
 #Ative o ufw
-operador@siscasa:~$ sudo ufw enable
+$ sudo ufw enable
 [sudo] password for operador: 
 Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
 Firewall is active and enabled on system startup
 
 #liberar o firewall para o postgre:
-operador@siscasa:~$ sudo ufw allow postgresql
+$ sudo ufw allow postgresql
 Rule added
 Rule added (v6)
 
 #reinicie o serviço postgre:
-operador@siscasa:~$ sudo systemctl restart postgresql.service 
-operador@siscasa:~$ 
+$ sudo systemctl restart postgresql.service 
+$ 
 ~~~
 
 <a id="configurando_ip_fixo"></a>
@@ -116,7 +116,7 @@ operador@siscasa:~$
 Com o comando `ip a` é possível decobrir o nome da placa de rede usada e que neste exemplo é **enp3s0**
 
 ~~~shell
-operador@siscasa:~$ ip a
+$ ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
@@ -215,7 +215,7 @@ O Ubuntu server já dá a opção de instalar o programa SSH que permite acesso 
 A chave SSH usa o IP para se conectar. Durante a instalação esta informação é mostrada na etapa que configura a internet. caso não tenha anotado use o comando `ip a` . Será mostrado uma sequencia de números iniciando com 192.168 e seguida de mais dois grupos de dígitos separados por ponto.
 
 ~~~shell
-operador@siscasa:~$ ip a
+$ ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
@@ -273,10 +273,10 @@ To see these additional updates run: apt list --upgradable
 
 
 Last login: Sat Aug  6 17:33:09 2022
-operador@siscasa:~$ 
+$ 
 ~~~
 
- A linha `operador@siscasa:~$` indica que a partir de agora você está dentro do servidor onde o seu usuário é *operador* e o nome do servidor é *siscasa* que foram definidos na instalação do Ubuntu. Note também que nem sempre, ao digitar uma senha no terminal Linux, aparecerá '*' para cada tecla clicada. 
+ A linha `$` indica que a partir de agora você está dentro do servidor onde o seu usuário é *operador* e o nome do servidor é *siscasa* que foram definidos na instalação do Ubuntu. Note também que nem sempre, ao digitar uma senha no terminal Linux, aparecerá '*' para cada tecla clicada. 
 
 <a id="configuracoes_especiais"></a>
 
@@ -391,8 +391,8 @@ operador@siscasa:/etc/systemd$ systemctl restart systemd-logind.service
 ### 4.1 Instalando o SAMBA
 
 ~~~shell
-operador@siscasa:~$ sudo apt install samba
-operador@siscasa:~$ cd /etc/samba
+$ sudo apt install samba
+$ cd /etc/samba
 operador@siscasa:/etc/samba$ ls
 gdbcommands  smb.conf  tls
 operador@siscasa:/etc/samba$ cp smb.conf bk_smb.conf 
@@ -403,14 +403,16 @@ bk_smb.conf  gdbcommands  smb.conf  tls
 operador@siscasa:/etc/samba$ sudo nano smb.conf 
 ~~~
 
+~~~shell
 [sambashare]
     comment = Samba on Ubuntu
     path = /media/sda4/samba
     read only = no
     browsable = yes
+~~~
 
 ~~~shell
-operador@siscasa:~$ cd /etc/samba/
+$ cd /etc/samba/
 operador@siscasa:/etc/samba$ ls
 bk_smb.conf  gdbcommands  smb.conf  tls
 operador@siscasa:/etc/samba$ sudo nano smb.conf 
@@ -432,12 +434,27 @@ operador@siscasa:/etc/samba$ systemctl status smbd
 
 #### 4.1.1 Acessando de uma máquina Windows
 
+abra o Windows Explorer (gerenciador de arquivos do Windows) e na barra de pesquisa escreva:
+
+\\ip\pasta
+
+neste exemplo ficou como:
+
+\\192.168.0.101\sambashare
+
+Insira o usuário e a senha
+
+clique com o botã odireito e selecione a opção *Mapear Unidadew de Rede*
+
+![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+
+faça as altyerações que julgar necessárias e clique em *OK*
+
 <a id="acesso_samba_linux"></a>
 
 #### 4.1.2 Acessando de uma máquina Linux
 
-no Nautilus clique Ctrl + l. No Thunar já aparece a barra de pesquisa
-na barra que aparecer escreva:
+No Gnome Files (Gerenciador de arquivos do Gnome, antigamente chamado de Nautilus) clique Ctrl + l. Já No Thunar (Gerenciador de arquivo do XFCE) já aparece a barra de pesquisa. Clique na barra e escreva:
 
 smb://IP/pasta/
 
@@ -446,7 +463,15 @@ como o IP cadastrado foi: 192.168.0.101 , então ficaria:
 
 smb://192.168.0.101/sambashare/
 
+![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+
 depois, coloque o usuário e a senha 
+
+![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
+
+Por fim clique com o botão direito encima da partição do lado esquerdo e selecione Adicionar marcador. Caso não apareça esta opção verifique se a mesma está dentro de  algum outro item ou com outro nome
+
+![Exemplo de uso e configuração da conexão usando o *DBeaver*](https://github.com/silvamathias/servidor_residencial/blob/main/media/conexao_postgre.png)
 
 <a id="instalando_postgre"></a>
 
@@ -479,12 +504,12 @@ sudo apt-get -y install postgresql
 
 ~~~shell
 #liberar o firewall para o postgre:
-operador@siscasa:~$ sudo ufw allow postgresql
+$ sudo ufw allow postgresql
 Rule added
 Rule added (v6)
 
 #reinicie o serviço postgre:
-operador@siscasa:~$ sudo systemctl restart postgresql.service 
+$ sudo systemctl restart postgresql.service 
 ~~~
 
 <a id="alterando_senha_postgre"></a>
@@ -571,7 +596,7 @@ Outros comando úteis:
 
 ~~~shell
 # Ir até a pasta com os arquivos para configuração. Perceba que a pasta **'16'** deve ser trocada caso sua versão não seja a 16 
-operador@siscasa:~$ cd /etc/postgresql/16/main/
+$ cd /etc/postgresql/16/main/
 
 # liste os arquivos da pasta
 operador@siscasa:/etc/postgresql/16/main$ ls
