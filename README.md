@@ -89,13 +89,15 @@ root@siscasa:~# apt update
 
 <a id="comandos_basicos"></a>
 
-### 2.3 Comando Básicos
+### 2.3 Comandos Básicos
 
 ## 3 Configurando o servidor
 
 <a id="configurando_firewall"></a>
 
 ### 3.1 Configurando o Firewall
+
+HAbilitar o Firewall 
 
 ~~~shell
 #Ative o ufw
@@ -104,8 +106,8 @@ $ sudo ufw enable
 Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
 Firewall is active and enabled on system startup
 
-#liberar o firewall para o postgre:
-$ sudo ufw allow postgresql
+#liberar o firewall para o ssh:
+$ sudo ufw allow ssh
 Rule added
 Rule added (v6)
 
@@ -670,3 +672,28 @@ Até o momento só o **PostgreSql** só foi acessado através do psql uma vez qu
 <a id="aprofundando_conhecimento"></a>
 
 ### 5.1 Aprofundando conhecimento
+
+~~~shell
+operador@siscasa:~$ sudo useradd leo -s /bin/bash
+operador@siscasa:~$ sudo passwd leo
+New password: 
+Retype new password: 
+passwd: password updated successfully
+operador@siscasa:~$ nano /etc/passwd
+operador@siscasa:~$ 
+
+~~~
+
+~~~shell
+sudo apt install cockpit
+sudo systemctl start cockpit
+sudo systemctl enable cockpit
+
+
+
+operador@siscasa:~$ sudo ufw allow 9090
+Rule added
+Rule added (v6)
+operador@siscasa:~$ sudo systemctl restart cockpit
+
+~~~
