@@ -55,7 +55,9 @@
 
 ### 1.3.1 Sistema Operacional
 
-As distribuições **Linux** mais comuns em servidores são Ubuntu, Debian, SUSE, Fedora, Red Hat, CentOS
+As distribuições **Linux** mais comuns em servidores são Debian, Ubuntu, SUSE, Red Hat, CentOS e Fedora. A Ubuntu é mantida pela empresa Canonical. É uma distro (abreviação de distribuição) derivada do Debian e a maior diferença entre elas é que o Debian restringe o uso de programas proprietários, o que tambem inclui drivers, e a Ubunto deixa esta decisão por conta do usuário final. A Distro Red Hat é mantida pela empresa de mesmo nome. Seu foco principal é o mercado corporativo, vendendo serviços de suporte e manutenão para as empresas que queiram criar seus hambientes usando linux. Por conta disto é difícil uma pessóa física usar seu sistema, contando apenas com um prazo de 30 dias para testar a distro antes de ter que pagar pelo cerviço. A opção mais usada são as distros derivadas do Red Hat, CentOS e Fedora, que são mantidas pela comunidade porém contam com o apoio da Red Hat.
+
+Para este projeto foi escolhida a distro Ubuntu, muito por conta de sua popularidade, o que a faz uma distro de fácil acesso a materias para consulta na internet, além do site da propria Canonical.
 
 ## 2 Instalando o Linux
 
@@ -63,7 +65,7 @@ As distribuições **Linux** mais comuns em servidores são Ubuntu, Debian, SUSE
 
 ### 2.1 Criando Pen drive bootavel e instalação
 
-Este início é igual para qualquer distribuição linux, Você vai presisar baixar a imagem ISO do site da Ubuntu e criar um pen drive com esta imagem usando um dos programas abaixo:
+Este início é igual para qualquer distribuição linux, Acesse o site da distro escolhida e baixe a imagem ISO do sistema. Para baixar a distro usada neste projeto basta ir até o site da [Ubuntu](https://ubuntu.com/download/server). Caso queira usar a mesma versão, procure por *Ubuntu 22.04.3 LTS*. Já com a imagem ISO em sua máquina, crie um pen drive com esta imagem usando um dos programas abaixo:
 
 * Rufus (Acho que este é o único que só possui verção para Windows);
 * Etcher (Este, assim como o acima, nunca usei);
@@ -76,20 +78,48 @@ Este início é igual para qualquer distribuição linux, Você vai presisar bai
 
 ### 2.2 Atualizando o sistema
 
-`sudo -i`
-`apt update`
+Entre no sistema usando o Usuário e a senha cadastrados durante a instalação. Este usuário criado durante a instalação estará configurado como padrão no sistema como um usuário *sudo*. Isto significa que este usuário poderá ter privilégios do administrador do hambiente através do comando *sudo* antes do comando que deseja executar. O primeiro uso irá solicitar a senha de seu usuário e a senha não será mais necessáris por alguns minutos. Outra opção e usar o comando `sudo -i` ou `sudo su`
+
+Toda distro Linux possui um *gerenciador de pacotes*. No Ubuntu é o *apt*. Com ele você ira atualizar primeiro a lista de repositórios e depois os programas instalados. Para tal o comando *sudo* deverá ser usado em conjunto. Use `sudo apt update`, clique em *Enter* para executar, depois `sudo apt upgrade` e clique em *Enter* novamente. Este comando irá solicitar que dijite *y ou s* para confirmar e *n* para negar a execuçã odo comando. caso queira fazer tudo isto em uma única linha digite:
 
 ~~~shell
-$ sudo -i
-[sudo] password for operador: 
-root@siscasa:~# apt update
+$ sudo apt update && sudo apt upgrade -y
 ~~~
 
-`apt upgrade`
+onde **&&** une os dois comandos para serem executados em sequência e **-y** autoriza automaticamente caso haja a necessidade de validarção 
 
 <a id="comandos_basicos"></a>
 
 ### 2.3 Comandos Básicos
+
+Caso seja novo no **Linux** abaixo segue uma lista dos principais comando usados neste projeto. O próprio manual servirá como exemplo de uso. Os comando `man` e `help`te ajudará a descobrir mais funcionalidades deles. Usando o comando `ls` como exemplo:
+
+~~~shell
+$ man ls
+$ ls --help
+~~~
+
+Realizar uma pesquisa na internet por eles também será útil
+
+**Comando**|**Descrição**
+|:---:|:---|
+--help|mostra uma lista de comando mais resumida que o comando man
+apt (apt-get)|gerenciador de pacote do Debian e suas distros derivadas
+cat|mostra o conteudo de um arquivo texto
+cd|navega pelos diretórios do sistema
+chown|altera o dono de um arquivo ou pasta, alterando assim as permissões de acesso e manipulação do item
+cp|copia um arquivo
+grep|realiza um filtro no comando anterior
+ip a|mostra os IP’s dos dispositivos de rede
+ls|lista os itens de um diretório
+lsblk|mostra informações sobre os dispositivos de armazenamento (HD, SSD, Pen Drive)
+man |mostra o manual do comando desejado
+mkdir|cria um diretório
+nano|abre um arquivo de texto com o editor nano
+resolved|comando vinculado ao Systemd que gerencia os serviços DNS
+rm|remove um arquivo
+systemctl|comando referente ao Systemd, gerenciador de serviços e sistema
+
 
 ## 3 Configurando o servidor
 
