@@ -55,7 +55,7 @@
 
 ### 1.3.1 Sistema Operacional
 
-As distribuições **Linux** mais comuns em servidores são Debian, Ubuntu, SUSE, Red Hat, CentOS e Fedora. A Ubuntu é mantida pela empresa Canonical. É uma distro (abreviação de distribuição) derivada do Debian e a maior diferença entre elas é que o Debian restringe o uso de programas proprietários, o que tambem inclui drivers, e a Ubunto deixa esta decisão por conta do usuário final. A Distro Red Hat é mantida pela empresa de mesmo nome. Seu foco principal é o mercado corporativo, vendendo serviços de suporte e manutenão para as empresas que queiram criar seus hambientes usando linux. Por conta disto é difícil uma pessóa física usar seu sistema, contando apenas com um prazo de 30 dias para testar a distro antes de ter que pagar pelo cerviço. A opção mais usada são as distros derivadas do Red Hat, CentOS e Fedora, que são mantidas pela comunidade porém contam com o apoio da Red Hat.
+As distribuições **Linux** mais comuns em servidores são Debian, Ubuntu, SUSE, Red Hat Enterprise Linux, CentOS e Fedora. A **Ubuntu** é mantida pela empresa Canonical. É uma distro (abreviação de distribuição) derivada do Debian e a maior diferença entre elas é que o Debian restringe o uso de programas proprietários, o que também inclui drivers, já a **Ubuntu** deixa esta decisão por conta do usuário final. A Distro Red Hat é mantida pela empresa de mesmo nome. Seu foco principal é o mercado corporativo, vendendo serviços de suporte e manutenão para as empresas que queiram criar seus hambientes usando linux. Por conta disso é difícil uma pessoa física usar seu sistema, contando apenas com um prazo de 30 dias para testar a distro antes de ter que pagar pelo cerviço. A opção mais usada são as distros derivadas do Red Hat, CentOS e Fedora, que são mantidas pela comunidade porém contam com o apoio da Red Hat.
 
 Para este projeto foi escolhida a distro Ubuntu, muito por conta de sua popularidade, o que a faz uma distro de fácil acesso a materias para consulta na internet, além do site da propria Canonical.
 
@@ -67,20 +67,20 @@ Para este projeto foi escolhida a distro Ubuntu, muito por conta de sua populari
 
 Este início é igual para qualquer distribuição linux, Acesse o site da distro escolhida e baixe a imagem ISO do sistema. Para baixar a distro usada neste projeto basta ir até o site da [Ubuntu](https://ubuntu.com/download/server). Caso queira usar a mesma versão, procure por *Ubuntu 22.04.3 LTS*. Já com a imagem ISO em sua máquina, crie um pen drive com esta imagem usando um dos programas abaixo:
 
-* Rufus (Acho que este é o único que só possui verção para Windows);
-* Etcher (Este, assim como o acima, nunca usei);
+* Rufus;
+* Etcher;
 * Ventoy (permite colocar várias imagens ISO em um único pendrive apenas arrastando o arquivo para ele);
-* YUMI  (foi o primeiro que usei e é muito fácil de usar).
+* YUMI.
 
-. Feito isto, ligue o computador com o pen drive já conectado na porta USB e entre na tela de opção de boot, geralmente apertando a tecla *F8*, selecione o pen drive que está a imagem ISO e confirme para abrir o assistente de instalação. É recomendado usar uma verção própria para servidores. o Ubuntu Server possui um assistente de instalação diferente das distros voltadas para uso pessoal. Como não possui interface gráfica a instalação é feita toda em modo texto porém o que é preciso fazer aparece em etapas na tela onde deve-se apenas escolher as opções usando as setas, marcar opções usando a tecla espaço e confirmar precionando enter. Ao final do processo seu sistema estará instalado. Caso tenha difivuldades pode optar por uma versão com interface gráfica mas é extremamente recomendado que seja uma versão LTS.
+. Feito isto, ligue o computador com o pen drive já conectado na porta USB e entre na tela de opção de boot, geralmente apertando a tecla *F8*, selecione o pen drive que está a imagem ISO e confirme para abrir o assistente de instalação. É recomendado usar uma verção própria para servidores. o **Ubuntu** Server possui um assistente de instalação diferente das distros voltadas para uso pessoal. Como não possui interface gráfica a instalação é feita toda em modo texto porém o que é preciso fazer aparece em etapas na tela onde deve-se apenas escolher as opções usando as setas, marcar opções usando a tecla espaço e confirmar precionando enter. Ao final do processo seu sistema estará instalado. Caso tenha difivuldades pode optar por uma versão com interface gráfica mas é extremamente recomendado que seja uma versão LTS.
 
 <a id="atu_sys"></a>
 
 ### 2.2 Atualizando o sistema
 
-Entre no sistema usando o Usuário e a senha cadastrados durante a instalação. Este usuário criado durante a instalação estará configurado como padrão no sistema como um usuário *sudo*. Isto significa que este usuário poderá ter privilégios do administrador do hambiente através do comando *sudo* antes do comando que deseja executar. O primeiro uso irá solicitar a senha de seu usuário e a senha não será mais necessáris por alguns minutos. Outra opção e usar o comando `sudo -i` ou `sudo su`
+Entre no sistema usando o Usuário e a senha cadastrados durante a instalação. Este usuário criado durante a instalação estará configurado por padrão no sistema como um usuário *sudo*. Isto significa que este usuário poderá ter privilégios do administrador do hambiente através do comando *sudo* antes do comando que deseja executar. O primeiro uso irá solicitar a senha de seu usuário e a senha não será mais necessáris por alguns minutos. Outra opção e usar o comando `su`, `sudo -i` ou `sudo su`, sendo o primeiro o mais indicado. Com esses comandos você ficará logado no sistema como usuário administratido. o símbolo `$` será trocado por `#` e não será solicitado senhas até que encerre o acesso com o comando `exit`.
 
-Toda distro Linux possui um *gerenciador de pacotes*. No Ubuntu é o *apt*. Com ele você ira atualizar primeiro a lista de repositórios e depois os programas instalados. Para tal o comando *sudo* deverá ser usado em conjunto. Use `sudo apt update`, clique em *Enter* para executar, depois `sudo apt upgrade` e clique em *Enter* novamente. Este comando irá solicitar que dijite *y ou s* para confirmar e *n* para negar a execuçã odo comando. caso queira fazer tudo isto em uma única linha digite:
+Toda distro Linux possui um *gerenciador de pacotes*. No **Ubuntu** é o *apt*. Com ele você ira atualizar primeiro a lista de repositórios e depois os programas instalados. Para tal o comando *sudo* deverá ser usado em conjunto. Use `sudo apt update`, clique em *Enter* para executar, depois `sudo apt upgrade` e clique em *Enter* novamente. Este comando irá solicitar que dijite *y ou s* para confirmar e *n* para negar a execução do comando. caso queira fazer tudo isto em uma única linha digite:
 
 ~~~shell
 $ sudo apt update && sudo apt upgrade -y
@@ -92,7 +92,7 @@ onde **&&** une os dois comandos para serem executados em sequência e **-y** au
 
 ### 2.3 Comandos Básicos
 
-Caso seja novo no **Linux** abaixo segue uma lista dos principais comando usados neste projeto. O próprio manual servirá como exemplo de uso. Os comando `man` e `help`te ajudará a descobrir mais funcionalidades deles. Usando o comando `ls` como exemplo:
+Caso seja novo no **Linux**, abaixo segue uma lista dos principais comando usados neste projeto. O próprio manual servirá como exemplo de uso. Os comandos `man` e `help`te ajudarão a descobrir mais funcionalidades deles. Usando o comando `ls` como exemplo:
 
 ~~~shell
 $ man ls
@@ -170,6 +170,8 @@ $ ip a
        valid_lft forever preferred_lft forever
 ~~~
 
+No código acima também é possível ver o retorno do comando ip a informando o ip do servidor como sendo 192.168.0.78
+
 Use o comando **resolvectl status** para visualizar os servidores DNS e anote os IP's da linha **DNS Servers**.
 
 ~~~shell
@@ -197,7 +199,7 @@ root@siscasa:/etc/netplan# rm 00-installer-config.yaml
 root@siscasa:/etc/netplan# nano 01-config-rede.yaml
 ~~~
 
-Copie o código abaixo e cole dentro do arquivo de configuração que acabou de criare depois atualize os campos abaixo:
+Copie o código abaixo e cole dentro do arquivo de configuração que acabou de criar e depois atualize os campos abaixo:
 
 * Altere **enp3s0** pelo nome da placa de rede de seu servidor;
 * Coloque aqui o IP que deseja usar no servidor. Neste exemplo foi trocado **192.168.0.78/24** por **192.168.0.101/24**;
@@ -224,7 +226,7 @@ network:
 ~~~
 
 Salve clicando **Ctrl + S** e saia do arquivo clicando **Ctrl + x**.
-Teste a configuração com o comando `netplan try`. Caso tenha dado tudo certo a menságem abaixo será mostrada. Clique **ENTER** conforme solicitado e aplique a as alterações com o comando `netplan apply`.
+Teste a configuração com o comando `netplan try`. Caso tenha dado tudo certo a mensagem abaixo será mostrada. Clique **ENTER** conforme solicitado e aplique a as alterações com o comando `netplan apply`.
 
 ~~~shell
 root@siscasa:/etc/netplan# netplan try
@@ -243,45 +245,25 @@ root@siscasa:/etc/netplan# netplan apply
 
 ### 3.3 Usando SSH
 
-O Ubuntu server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use os comandos:
+O **Ubuntu** server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use os comandos:
 
 * `sudo apt install opensh-server` para instalar o programa; 
 * `sudo service ssh start` para iniciar o serviço;
 * `ps aux | grep ssh` para testar o programa.
 
-A chave SSH usa o IP para se conectar. Durante a instalação esta informação é mostrada na etapa que configura a internet. caso não tenha anotado use o comando `ip a` . Será mostrado uma sequencia de números iniciando com 192.168 e seguida de mais dois grupos de dígitos separados por ponto.
+Como alteramos o IP para **192.168.0.101** basta usá-lo para conectar através do *SSH*. Caso não tenha trocado ainda ou queira confirmar, use o comando `ip a` para isto.
 
-~~~shell
-$ ip a
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
-       valid_lft forever preferred_lft forever
-2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 48:5b:39:ce:f1:c5 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.0.78/24 metric 100 brd 192.168.0.255 scope global dynamic enp3s0
-       valid_lft 2564sec preferred_lft 2564sec
-    inet6 2804:14d:5c20:9479:4a5b:39ff:fece:f1c5/64 scope global dynamic mngtmpaddr noprefixroute
-       valid_lft 3600sec preferred_lft 3600sec
-    inet6 fe80::4a5b:39ff:fece:f1c5/64 scope link
-       valid_lft forever preferred_lft forever
-~~~
-
-No código acima é possível ver o retorno do comando `ip a` informando o ip do servidor como sendo **192.168.0.78**
-
-Com estas informações já é possivel acessar o servidor usando o SSH mas é possivel seguir com a configuração diretamente no servidor ou então pode  desligá-lo; colocá-lo ao lado do seu roteador de internet; conectá-los usando um cabo de rede e ligar o PC novamente sem monitor ou teclado.
+Tendo o IP correto já é possivel acessar o servidor usando o SSH mas é possivel seguir com a configuração diretamente no servidor ou então pode  desligá-lo; colocá-lo ao lado do seu roteador de internet; conectá-los usando um cabo de rede e ligar o PC novamente sem monitor ou teclado.
 
 De um outro computador, abra o terminal se for um Linux e escreva *sudo ssh nome_do_usuário@ip*, caso seja Windows, abra o CMD ou o Powershell e escreva a mesma coisa mas sem usar o sudo.
 
 ~~~shell
-ph@A320:~$ sudo ssh operador@192.168.0.78
-The authenticity of host '192.168.0.78 (192.168.0.78)' can't be established.
+ph@A320:~$ sudo ssh operador@192.168.0.101
+The authenticity of host '192.168.0.101 (192.168.0.101)' can't be established.
 ECDSA key fingerprint is SHA256:+lySxZ6u2RtnXtoQ9Oo1rHZ5c/feCiaQcuO8iNgLqj8.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added '192.168.0.78' (ECDSA) to the list of known hosts.
-operador@192.168.0.78's password: 
+Warning: Permanently added '192.168.0.101' (ECDSA) to the list of known hosts.
+operador@192.168.0.101's password: 
 Welcome to Ubuntu 22.04 LTS (GNU/Linux 5.15.0-43-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
@@ -499,7 +481,7 @@ No Gnome Files (Gerenciador de arquivos do Gnome, antigamente chamado de Nautilu
 
 smb://IP/pasta/
 
-Onde pasta é a pasta que deu nome lá no arquivo de configuração do samba (neste caso, 'sambashare' é o nome da pasta)
+Onde *pasta* é a pasta que deu nome lá no arquivo de configuração do samba (neste caso, 'sambashare' é o nome da pasta)
 como o IP cadastrado foi: 192.168.0.101 , então ficaria:
 
 smb://192.168.0.101/sambashare/
@@ -588,7 +570,7 @@ postgres=# select * from pg_user;
 
 #### 4.2.4 Criando e acessando um banco de dados
 
-Só será possível criar um banco de dados usando o psql. Caso não tenha certesa do banco que deseja criar, siga o exemplo abaixo mas saiba que terá que acessar desta forma para criar outros banco.
+Só será possível criar um banco de dados usando o psql. Caso não tenha certeza do banco que deseja criar, siga o exemplo abaixo mas saiba que terá que acessar desta forma para criar outros banco.
 
 ~~~shell
 # criando banco
