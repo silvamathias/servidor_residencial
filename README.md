@@ -92,7 +92,7 @@ onde **&&** une os dois comandos para serem executados em sequência e **-y** au
 
 ### 2.3 Comandos Básicos
 
-Caso seja novo no **Linux**, abaixo segue uma lista dos principais comando usados neste projeto. O próprio manual servirá como exemplo de uso. Os comandos `man` e `help`te ajudarão a descobrir mais funcionalidades deles. Usando o comando `ls` como exemplo:
+O Linux é um sistema que funciona por *linha de comando* e que é possivem instalar interfaces gráficas para facilitar o uso em computadores pessoais. A sigla **CLI** (Command Line Interface) é usada para se referir a estes comandos usados no terminal ou em sistemas que não possuem interfaces gráficas como é o caso dos servidores. Caso seja novo no **Linux**, abaixo segue uma lista dos principais comando usados neste projeto. O próprio manual servirá como exemplo de uso. Os comandos `man` e `help`te ajudarão a descobrir mais funcionalidades deles. Usando o comando `ls` como exemplo:
 
 ~~~shell
 $ man ls
@@ -105,21 +105,31 @@ Realizar uma pesquisa na internet por eles também será útil
 |:---:|:---|
 --help|mostra uma lista de comando mais resumida que o comando man
 apt (apt-get)|gerenciador de pacote do Debian e suas distros derivadas
+btop|possui o mesmo objetivo que o *htop* mas com um visual diferente
 cat|mostra o conteudo de um arquivo texto
 cd|navega pelos diretórios do sistema
 chown|altera o dono de um arquivo ou pasta, alterando assim as permissões de acesso e manipulação do item
+clear|limpa a tela do terminal. As teclas *"Ctrl l"* também funciona da mesma forma
 cp|copia um arquivo
 grep|realiza um filtro no comando anterior
+htop|cli gerenciador de processos. Informa o uso dos recursos por cada programa e permite encerrar sua execução
+inxi|Mostra as informações do sistema, tanto de software quanto de hardware
 ip a|mostra os IP’s dos dispositivos de rede
 ls|lista os itens de um diretório
 lsblk|mostra informações sobre os dispositivos de armazenamento (HD, SSD, Pen Drive)
 man |mostra o manual do comando desejado
 mkdir|cria um diretório
 nano|abre um arquivo de texto com o editor nano
+neofetch|é uma verção simplificada do comando *inxi* e que mostra o logo da distro usada
 resolved|comando vinculado ao Systemd que gerencia os serviços DNS
 rm|remove um arquivo
 systemctl|comando referente ao Systemd, gerenciador de serviços e sistema
 
+Alguns destes comando ficarão em uso até que seja encerrado pelo usuário. Geralmente a letra *q* de *quit* é usada para isto. Caso não funcione, precione as téclas *"Ctrl c"* para encerrar qualquer processo que esteja sendo executado pelo terminal.
+
+Caso um desses comandos acima não esteja instalado irá retornar uma mensagem de erro, podendo até sugerir sua instalação informando o comando para isto.
+
+Caso isto ocorra com o *btop* por exemplo, basta usar o comando `sudo apt install btop` para instalá-lo
 
 ## 3 Configurando o servidor
 
@@ -135,15 +145,15 @@ $ sudo ufw enable
 [sudo] password for operador: 
 Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
 Firewall is active and enabled on system startup
+~~~
 
+Aproveite para liberar o uso do *ssh* caso já tenha instalado durante a instalação do *Ubuntu*
+
+~~~shell
 #liberar o firewall para o ssh:
 $ sudo ufw allow ssh
 Rule added
 Rule added (v6)
-
-#reinicie o serviço postgre:
-$ sudo systemctl restart postgresql.service 
-$ 
 ~~~
 
 <a id="configurando_ip_fixo"></a>
@@ -170,7 +180,7 @@ $ ip a
        valid_lft forever preferred_lft forever
 ~~~
 
-No código acima também é possível ver o retorno do comando ip a informando o ip do servidor como sendo 192.168.0.78
+No código acima também é possível ver o retorno do comando `ip a` informando o *ip* do servidor como sendo 192.168.0.78
 
 Use o comando **resolvectl status** para visualizar os servidores DNS e anote os IP's da linha **DNS Servers**.
 
@@ -249,13 +259,16 @@ O **Ubuntu** server já dá a opção de instalar o programa SSH que permite ace
 
 * `sudo apt install opensh-server` para instalar o programa; 
 * `sudo service ssh start` para iniciar o serviço;
+* `sudo ufw allow ssh` para liberar o *Firewall*
 * `ps aux | grep ssh` para testar o programa.
+
+
 
 Como alteramos o IP para **192.168.0.101** basta usá-lo para conectar através do *SSH*. Caso não tenha trocado ainda ou queira confirmar, use o comando `ip a` para isto.
 
 Tendo o IP correto já é possivel acessar o servidor usando o SSH mas é possivel seguir com a configuração diretamente no servidor ou então pode  desligá-lo; colocá-lo ao lado do seu roteador de internet; conectá-los usando um cabo de rede e ligar o PC novamente sem monitor ou teclado.
 
-De um outro computador, abra o terminal se for um Linux e escreva *sudo ssh nome_do_usuário@ip*, caso seja Windows, abra o CMD ou o Powershell e escreva a mesma coisa mas sem usar o sudo.
+De um outro computador, abra o terminal se for um Linux e escreva *sudo ssh nome_do_usuário@ip*, caso seja Windows, abra o CMD ou o Powershell e escreva a mesma coisa mas sem usar o *sudo*.
 
 ~~~shell
 ph@A320:~$ sudo ssh operador@192.168.0.101
@@ -465,11 +478,11 @@ neste exemplo ficou como:
 
 Insira o usuário e a senha
 
-clique com o botã odireito e selecione a opção *Mapear Unidadew de Rede*
+clique com o botão direito e selecione a opção *Mapear Unidadew de Rede*
 
 ![Exemplo de uso e configuração samba com Windows #2](https://github.com/silvamathias/servidor_residencial/blob/main/media/samba_win/samba_win_2.png)
 
-faça as altyerações que julgar necessárias e clique em *OK*
+faça as alterações que julgar necessárias e clique em *OK*
 
 ![Exemplo de uso e configuração samba com Windows #3](https://github.com/silvamathias/servidor_residencial/blob/main/media/samba_win/samba_win_3.png)
 
@@ -481,7 +494,7 @@ No Gnome Files (Gerenciador de arquivos do Gnome, antigamente chamado de Nautilu
 
 smb://IP/pasta/
 
-Onde *pasta* é a pasta que deu nome lá no arquivo de configuração do samba (neste caso, 'sambashare' é o nome da pasta)
+Onde *pasta* é a pasta informada entre *[]* lá no arquivo de configuração do samba (neste caso, 'sambashare' é o nome da pasta)
 como o IP cadastrado foi: 192.168.0.101 , então ficaria:
 
 smb://192.168.0.101/sambashare/
@@ -539,6 +552,8 @@ $ sudo systemctl restart postgresql.service
 
 #### 4.2.3 Alterando a senha do Postgre
 
+Ao instalar o **PostgreSql** também é instalado o CLI **psql** para que se possa acessar o banco usando o terminal.
+
 Entre no Postgre com o comando `sudo -u postgres psql` e altere a senha usando `alter user postgres with encrypted password 'operador123456';`. Coloque sempre ***';'** no final para não apresentar erro. O comando **'\q'** sai do Postgre.
 Depois crie um novo usuário e consigure sua senha.
 
@@ -569,6 +584,7 @@ postgres=# select * from pg_user;
 <a id="criando_e_acessando_bd"></a>
 
 #### 4.2.4 Criando e acessando um banco de dados
+
 
 Só será possível criar um banco de dados usando o psql. Caso não tenha certeza do banco que deseja criar, siga o exemplo abaixo mas saiba que terá que acessar desta forma para criar outros banco.
 
@@ -660,7 +676,7 @@ trust => não solicita senha
 
 md5 => solicita senha
 
-Para este exemplo foi incluido uma linha de comentário para explicitar que a configuração abaixo foi criada pelo usuário. O resultado final ficou conforme abaixo:
+Para este exemplo foi incluido uma linha de comentário, iniciada com *#*, para explicitar que a configuração abaixo foi criada pelo usuário. O resultado final ficou conforme abaixo:
 
 ~~~shel
 # configuracao manual
@@ -673,7 +689,7 @@ Depois de salvar e sair de cada um dos arquivos, reinicie o **PostgreSql** com o
 
 #### 4.2.6 Acessando o banco remotamente?
 
-Até o momento só o **PostgreSql** só foi acessado através do psql uma vez que esteja logado no servidor por uma conexão remota com ssh ou fisicamente com um acesso direto ao servidor fisicamente. É recomendado que se use o [DBeaver](https://dbeaver.io/download/) para isto. 
+Até o momento o **PostgreSql** só foi acessado através do psql pois está logado no servidor por uma conexão remota com ssh ou fisicamente com um acesso direto ao servidor fisicamente. Para que se possa acessar o banco de uma forma mais amigável ao usuário comum e mais segura do ponto de vista do servidor. Para isto é utilizado uma **IDE** (Integrated Development Environment) própriada para a administração e uso do bancos de dados. É recomendado que se use o [DBeaver](https://dbeaver.io/download/); Com ela será possível acessar o banco de dados sem a necessidade de conceder acesso também ao servidor através do *ssh*. 
 
 *DBeaver* é um cliente SQL multiplataforma, com versões para Linux, Windows e Mac, possibilitando o acesso e o gerenciamento de diversos bancos de dados, entre eles o **PostgreSql**. Basta realizar a instalação, abrir o programa e criar uma conexão nova informando **o host, o banco de dados, o usuário e a senha**, conforme abaixo. O campo *URL* será atualizado automaticcamente.
 
