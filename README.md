@@ -78,9 +78,9 @@ Este início é igual para qualquer distribuição linux, Acesse o site da distr
 
 ### 2.2 Atualizando o sistema
 
-Entre no sistema usando o Usuário e a senha cadastrados durante a instalação. Este usuário criado durante a instalação estará configurado por padrão no sistema como um usuário *sudo*. Isto significa que este usuário poderá ter privilégios do administrador do hambiente através do comando *sudo* antes do comando que deseja executar. O primeiro uso irá solicitar a senha de seu usuário e a senha não será mais necessáris por alguns minutos. Outra opção e usar o comando `su`, `sudo -i` ou `sudo su`, sendo o primeiro o mais indicado. Com esses comandos você ficará logado no sistema como usuário administratido. o símbolo `$` será trocado por `#` e não será solicitado senhas até que encerre o acesso com o comando `exit`.
+Entre no sistema usando o Usuário e a senha cadastrados durante a instalação. Este usuário criado durante a instalação estará configurado por padrão no sistema como um usuário *sudo*. Isto significa que este usuário poderá ter privilégios do administrador do hambiente através do comando *sudo* antes do comando que deseja executar. O primeiro uso irá solicitar a senha de seu usuário e a senha não será mais necessáris por alguns minutos. Outra opção e usar o comando `su`, `sudo -i` ou `sudo su`, sendo o primeiro o mais indicado. Com esses comandos você ficará logado no sistema como usuário administratido. o símbolo `$` será trocado por `#` e não será solicitado senhas até que encerre o acesso com o comando `exit`. Ao longo desteartigo será usado aamgbos os casos então observe que toda vez que o símbolo "$" está presente o *sudo* foi usado para determinados comandos e quando estiver mostrando "#", o *sudo* não foi usado.
 
-Toda distro Linux possui um *gerenciador de pacotes*. No **Ubuntu** é o *apt*. Com ele você ira atualizar primeiro a lista de repositórios e depois os programas instalados. Para tal o comando *sudo* deverá ser usado em conjunto. Use `sudo apt update`, clique em *Enter* para executar, depois `sudo apt upgrade` e clique em *Enter* novamente. Este comando irá solicitar que dijite *y ou s* para confirmar e *n* para negar a execução do comando. caso queira fazer tudo isto em uma única linha digite:
+Toda distro Linux possui um *gerenciador de pacotes*. No **Ubuntu** é o *apt*. Com ele você ira atualizar primeiro a lista de repositórios e depois os programas instalados. Para tal o comando *sudo* deverá ser usado em conjunto. Use `sudo apt update`, clique em *Enter* para executar, depois `sudo apt upgrade` e clique em *Enter* novamente. Este comando irá solicitar que digite *y ou s* para confirmar e *n* para negar a execução do comando. caso queira fazer tudo isto em uma única linha digite:
 
 ~~~shell
 $ sudo apt update && sudo apt upgrade -y
@@ -314,9 +314,15 @@ $
 
 ### 3.4 Configurações opcionais
 
+As configurações a seguir serão necessárias caso tenha mais de uma partição disponível ou esteja usando um **Notebook** para montar este servidor. É necessário que monte de forma automática a partição ao ligar o servidor e configurar a tampa do notebook para que não suspenda ou desligue o servidor quando este estiver com a tampa fechada.
+
 <a id="montando_particao"></a>
 
 #### 3.4.1 Montando partição automaticamente ao ligar o servidor
+
+Caso tenha particionado seu dispositivo de armazenamento ou tenha mais de um dispositivo instalado, seja um **SSD** ou **HD**, será necessário que montar esta partição automaticamente ao iniciar o servidor. Caso contrário, sempre que o servidor for iniciádo deverá montar as partições no local apropriado. É o tipo de configuração que não é necessária quando está usando o *Linux* no seu PC particular a menos que tenha algum programa use os arquivos salvos na partição em questão.
+
+Use o comando `lsblk` para listar os dispositivos de armazenamento e suas informações relevantes, incluíndo o **ponto de montagem**
 
 ~~~shell
 operador@siscasa:/$ lsblk
@@ -332,6 +338,10 @@ sda      8:0    0 111,8G  0 disk
 ├─sda2   8:2    0    50G  0 part /
 ├─sda3   8:3    0    10G  0 part [SWAP]
 └─sda4   8:4    0    51G  0 part 
+~~~
+
+Vemos que temos um *disco* denominado **sda** com 111,8 GB. Este disco está dividido em 4 partições nomeadas de *sda1* até *sda4*. O sistema está instalado na partição *sda2* onde podemos ver que está montada na pasta **/**. A partição *sda2* é usada como memória **SWAP** e a *sda4* não está montada. Será esta a partição que será configurada para ser montada automa5ticamente, para isto primeiro deve-se criar uma pasta para ser usada como ponto de montagem.
+
 operador@siscasa:/$ cd /
 operador@siscasa:/$ ls
 bin   dev  home  lib32  libx32      media  opt   root  sbin  srv       sys  usr
@@ -494,7 +504,7 @@ No Gnome Files (Gerenciador de arquivos do Gnome, antigamente chamado de Nautilu
 
 smb://IP/pasta/
 
-Onde *pasta* é a pasta informada entre *[]* lá no arquivo de configuração do samba (neste caso, 'sambashare' é o nome da pasta)
+Onde *pasta* é a pasta informada entre **[]** lá no arquivo de configuração do samba (neste caso, 'sambashare' é o nome da pasta)
 como o IP cadastrado foi: 192.168.0.101 , então ficaria:
 
 smb://192.168.0.101/sambashare/
