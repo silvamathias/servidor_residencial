@@ -118,6 +118,7 @@ ip a|mostra os IP’s dos dispositivos de rede
 ls|lista os itens de um diretório
 lsblk|mostra informações sobre os dispositivos de armazenamento (HD, SSD, Pen Drive)
 man |mostra o manual do comando desejado
+mount|monta uma partição, seja pendrive, CD, HD, etc
 mkdir|cria um diretório
 nano|abre um arquivo de texto com o editor nano
 neofetch|é uma verção simplificada do comando *inxi* e que mostra o logo da distro usada
@@ -340,24 +341,100 @@ sda      8:0    0 111,8G  0 disk
 └─sda4   8:4    0    51G  0 part 
 ~~~
 
-Vemos que temos um *disco* denominado **sda** com 111,8 GB. Este disco está dividido em 4 partições nomeadas de *sda1* até *sda4*. O sistema está instalado na partição *sda2* onde podemos ver que está montada na pasta **/**. A partição *sda2* é usada como memória **SWAP** e a *sda4* não está montada. Será esta a partição que será configurada para ser montada automa5ticamente, para isto primeiro deve-se criar uma pasta para ser usada como ponto de montagem.
+É possível ver que existe um *dispositivo de armazenamento* denominado **sda** com 111,8 GB. Este disco está dividido em 4 partições nomeadas de *sda1* até *sda4*. O sistema está instalado na partição *sda2* onde podemos ver que está montada na pasta **/**. A partição *sda2* é usada como memória **SWAP** e a *sda4* não está montada. Será esta a partição que será configurada para ser montada automaticamente.
 
+O comando `sudo fdisk -l` mostra informações mais detalhadas sobre os dispositivos instalados. Com ele é possível ver em qual pasta está cada partição dos dispositivos. O retorno deste comando costuma ser bem longo, por isso é recomendado o uso primeiro de `lsblk` para já ter uma nossão do que procurar dentro do *fdisk*. Abaixo está reproduzido seu retorno apenas a parte que dis respeito ao dispositivo de interesse, *sda*.
+
+~~~shell
+Disk /dev/sda: 111,79 GiB, 120034123776 bytes, 234441648 sectors
+Disk model: SSD 120GB
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: CA96EB09-1097-4B27-B5BF-0B03ECA5CFA6
+
+Device         Start       End   Sectors Size Type
+/dev/sda1       2048      4095      2048   1M BIOS boot
+/dev/sda2       4096 104861695 104857600  50G Linux filesystem
+/dev/sda3  104861696 125833215  20971520  10G Linux swap
+/dev/sda4  125833216 232787967 106954752  51G Linux filesystem
+~~~
+
+Acima é possível ver que a partição *sda4* está no diretório **/dev/sda4**, esta informação será útil para montar a partição, mas antes deve-se criar uma pasta para ser usada como ponto de montagem.
+
+Use o comando `cd /` para navegar até a pasta raiz do sistma. Com o comando `ls`, liste todas as pastas existentes. 
+
+~~~shell
 operador@siscasa:/$ cd /
 operador@siscasa:/$ ls
 bin   dev  home  lib32  libx32      media  opt   root  sbin  srv       sys  usr
 boot  etc  lib   lib64  lost+found  mnt    proc  run   snap  swap.img  tmp  var
+~~~
+
+As pastas **media** e **mnt** são destinadas a montagem das partições, sendo *media* a pasta usada quando o sistema monta uma partição (ao iniciar ou quando se conecta um pendrive por exemplo) e a pasta *mnt* é destinada às partições montadas pelo usuário ou temporárias. Na prática pode-se criar em qualquer local mas como trata-se ede um servidor é bom seguir as recomendações e boas práticas. Tendo isto, será criada uma pasta dentro de *media* e nomeada de *sda4* para facilitar a identificação da partição lá montada.
+
+~~~shell
 operador@siscasa:/$ cd media
 operador@siscasa:/media$ ls
-operador@siscasa:/media$ mkdir sda4
-mkdir: cannot create directory ‘sda4’: Permission denied
 operador@siscasa:/media$ sudo mkdir sda4
 operador@siscasa:/media$ ls
 sda4
+~~~
+
+O comando acima entra na pasta *media* e verifica se já existe alguma pasta salva. Após, cria com `mkdir` a pasta *sda4* e lista novamente para certificar que foi criada.
+
+~~~shell
 operador@siscasa:/media$ sudo mount /dev/sda4 /media/sda4
 operador@siscasa:/media$ cd sda4
 operador@siscasa:/media/sda4$ ls
 lost+found
 ~~~
+
+Já este trecho acima usa as informações dos comandos `lsblk` que foi usado para identificar as partições disponíveis e que não estavam montadas e do comando `fdisk` usado para identificar o diretório da partição, para montar a partição **sda4** na pasta *sda4*. Obcerve que o caminho da pasta deveser completo deswde o diretório raiz (/media/sda4). Depois entra na pasta e lista os arquivos.
+
+observe que:
+
+* **/dev/sda4**: Diretório onde está a partição no sistema. Ela não está disponível para uso neste local, necessitando sua montagem em outro diretório;
+* **/media/sda4**: Pasta criada para montar a partição *sda4* e torná-la disponível após a montagem.
+
+Caso use o comando `mount`apenas, será possível verificar as partições montadas mas seu retorno costuma ser longo e confuso, a melhor opção é usar novamente o comando *lsblk* para isto. O comando `sudo umount /dev/sda4` pode ser usado para desmontar a partição, obcerve que não é preciso o caminho da pasta onde a partição foi montada.
+
+~~~shell
+operador@siscasa:~$ lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+loop0    7:0    0   103M  1 loop /snap/lxd/23541
+loop1    7:1    0 111,9M  1 loop /snap/lxd/24322
+loop2    7:2    0  40,8M  1 loop /snap/snapd/20092
+loop3    7:3    0  63,5M  1 loop /snap/core20/2015
+loop4    7:4    0  49,6M  1 loop /snap/snapd/17883
+loop5    7:5    0  63,2M  1 loop /snap/core20/1695
+sda      8:0    0 111,8G  0 disk
+├─sda1   8:1    0     1M  0 part
+├─sda2   8:2    0    50G  0 part /
+├─sda3   8:3    0    10G  0 part [SWAP]
+└─sda4   8:4    0    51G  0 part /media/sda4
+~~~
+
+Outra configuração importante é mudar a 
+
+~~~shell
+operador@siscasa:/media/sda4$ cd ..
+operador@siscasa:/media$ ls
+sda4
+operador@siscasa:/media$ ls -l
+total 4
+drwxr-xr-x 3 root root 4096 ago  6  2022 sda4
+operador@siscasa:/media$ sudo chown -R operador:operador /media/sda4
+operador@siscasa:/media$ ls -l
+total 4
+drwxr-xr-x 3 operador operador 4096 ago  6  2022 sda4
+operador@siscasa:/media$ cd sda4/
+operador@siscasa:/media/sda4$ mkdir samba
+operador@siscasa:/media/sda4$ ls
+lost+found  samba
+~~~
+
 
 Neste exemplo 	(coluna 1) é montada a partição sda4 que está em /dev/sda4;
 			(coluna 2) na pasta /mnt/sda4, onde mnt (abreviação de mount) é uma pasta padrão do 
@@ -385,21 +462,6 @@ sda      8:0    0 111,8G  0 disk
 ├─sda3   8:3    0    10G  0 part [SWAP]
 └─sda4   8:4    0    51G  0 part /media/sda4
 operador@siscasa:/media/sda4$ sudo nano /etc/fstab
-operador@siscasa:/media/sda4$ cd ..
-operador@siscasa:/media$ ls
-sda4
-operador@siscasa:/media$ ls -l
-total 4
-drwxr-xr-x 3 root root 4096 ago  6  2022 sda4
-operador@siscasa:/media$ sudo chown -R operador:operador /media/sda4
-operador@siscasa:/media$ ls -l
-total 4
-drwxr-xr-x 3 operador operador 4096 ago  6  2022 sda4
-operador@siscasa:/media$ cd sda4/
-operador@siscasa:/media/sda4$ mkdir samba
-operador@siscasa:/media/sda4$ ls
-lost+found  samba
-
 ~~~
 
 
