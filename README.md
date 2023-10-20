@@ -12,7 +12,7 @@
     * 2.1 [Criando Pen drive bootavel e instalação](#criando_pendrive)
     * 2.2 [Atualizando o sistema](#atu_sys)
     * 2.3 [Comandos básicos](#comandos_basicos)
-    * 
+
 3. Configurando o servidor
    * 3.1 [Configurando o Firewall](#configurando_firewall)
    * 3.2 [Configurando IP fixo](#configurando_ip_fixo)
@@ -20,6 +20,8 @@
    * 3.4 [Configurações opcionais](#configuracoes_especiais)
       * 3.4.1 [Montando partição automaticamente ao ligar o servidor](#montando_particao)
       * 3.4.2 [Configurando a tampa do Notebook](#tampa_notebook)
+   * 3.5 [Usuários e grupos](#usuario_grupo)
+   * 3.6 [Cuidados com a segurança](#seguranca)
 
 4. Atribuindo funcionalidades
    * 4.1 [Instalando o SAMBA](#samba)
@@ -321,7 +323,7 @@ As configurações a seguir serão necessárias caso tenha mais de uma partiçã
 
 #### 3.4.1 Montando partição automaticamente ao ligar o servidor
 
-Caso tenha particionado seu dispositivo de armazenamento ou tenha mais de um dispositivo instalado, seja um **SSD** ou **HD**, será necessário que montar esta partição automaticamente ao iniciar o servidor. Caso contrário, sempre que o servidor for iniciádo deverá montar as partições no local apropriado. É o tipo de configuração que não é necessária quando está usando o *Linux* no seu PC particular a menos que tenha algum programa use os arquivos salvos na partição em questão.
+Caso tenha particionado seu dispositivo de armazenamento ou tenha mais de um dispositivo instalado, seja um **SSD** ou **HD**, será necessário montar esta partição automaticamente ao iniciar o servidor, se não sempre que o servidor for iniciádo deverá montar as partições no local apropriado. É o tipo de configuração que não é necessária quando está usando o *Linux* no seu PC particular a menos que tenha algum programa que use os arquivos salvos na partição em questão e precise que sejão disponibilizados o quanto antes.
 
 Use o comando `lsblk` para listar os dispositivos de armazenamento e suas informações relevantes, incluíndo o **ponto de montagem**
 
@@ -341,9 +343,9 @@ sda      8:0    0 111,8G  0 disk
 └─sda4   8:4    0    51G  0 part 
 ~~~
 
-É possível ver que existe um *dispositivo de armazenamento* denominado **sda** com 111,8 GB. Este disco está dividido em 4 partições nomeadas de *sda1* até *sda4*. O sistema está instalado na partição *sda2* onde podemos ver que está montada na pasta **/**. A partição *sda2* é usada como memória **SWAP** e a *sda4* não está montada. Será esta a partição que será configurada para ser montada automaticamente.
+É possível ver que existe um *dispositivo de armazenamento* denominado **sda** com 111,8 GB. Este disco está dividido em 4 partições nomeadas de *sda1* até *sda4*. O sistema está instalado na partição *sda2* onde podemos ver que está montada na pasta **/**. A partição *sda2* é usada como memória **SWAP** e a *sda4* não está montada. Será esta a partição usada para ser montada automaticamente.
 
-O comando `sudo fdisk -l` mostra informações mais detalhadas sobre os dispositivos instalados. Com ele é possível ver em qual pasta está cada partição dos dispositivos. O retorno deste comando costuma ser bem longo, por isso é recomendado o uso primeiro de `lsblk` para já ter uma nossão do que procurar dentro do *fdisk*. Abaixo está reproduzido seu retorno apenas a parte que dis respeito ao dispositivo de interesse, *sda*.
+O comando `sudo fdisk -l` mostra informações mais detalhadas sobre os dispositivos instalados. Com ele é possível ver em qual pasta está cada partição dos dispositivos. O retorno deste comando costuma ser bem longo, por isso é recomendado o uso primeiro de `lsblk` para já ter uma nossão do que procurar dentro do *fdisk*. Abaixo está reproduzido seu retorno apenas da parte que diz respeito ao dispositivo de interesse, *sda*.
 
 ~~~shell
 Disk /dev/sda: 111,79 GiB, 120034123776 bytes, 234441648 sectors
@@ -372,7 +374,7 @@ bin   dev  home  lib32  libx32      media  opt   root  sbin  srv       sys  usr
 boot  etc  lib   lib64  lost+found  mnt    proc  run   snap  swap.img  tmp  var
 ~~~
 
-As pastas **media** e **mnt** são destinadas a montagem das partições, sendo *media* a pasta usada quando o sistema monta uma partição (ao iniciar ou quando se conecta um pendrive por exemplo) e a pasta *mnt* é destinada às partições montadas pelo usuário ou temporárias. Na prática pode-se criar em qualquer local mas como trata-se ede um servidor é bom seguir as recomendações e boas práticas. Tendo isto, será criada uma pasta dentro de *media* e nomeada de *sda4* para facilitar a identificação da partição lá montada.
+As pastas **media** e **mnt** são destinadas a montagem das partições, sendo *media* a pasta usada quando o sistema monta uma partição (ao iniciar ou quando se conecta um pendrive em distribuições com interface gráfica por exemplo) e a pasta *mnt* é destinada às partições montadas pelo usuário usando o terminal ou dispositivos temporários. Na prática pode-se criar em qualquer local mas como trata-se de um servidor é bom seguir as recomendações e boas práticas. Tendo isto, será criada uma pasta dentro de *media* e nomeada de *sda4* para facilitar a identificação da partição lá montada.
 
 ~~~shell
 operador@siscasa:/$ cd media
@@ -391,14 +393,14 @@ operador@siscasa:/media/sda4$ ls
 lost+found
 ~~~
 
-Já este trecho acima usa as informações dos comandos `lsblk` que foi usado para identificar as partições disponíveis e que não estavam montadas e do comando `fdisk` usado para identificar o diretório da partição, para montar a partição **sda4** na pasta *sda4*. Obcerve que o caminho da pasta deveser completo deswde o diretório raiz (/media/sda4). Depois entra na pasta e lista os arquivos.
+Já este trecho acima usa as informações dos comandos `lsblk` que foi usado para identificar as partições disponíveis e que não estavam montadas e do comando `fdisk` usado para identificar o diretório da partição, para montar a partição **sda4** na pasta *sda4*. Observe que o caminho da pasta deveser completo deswde o diretório raiz (/media/sda4). Depois entra na pasta e lista os arquivos.
 
-observe que:
+Repare que:
 
 * **/dev/sda4**: Diretório onde está a partição no sistema. Ela não está disponível para uso neste local, necessitando sua montagem em outro diretório;
 * **/media/sda4**: Pasta criada para montar a partição *sda4* e torná-la disponível após a montagem.
 
-Caso use o comando `mount`apenas, será possível verificar as partições montadas mas seu retorno costuma ser longo e confuso, a melhor opção é usar novamente o comando *lsblk* para isto. O comando `sudo umount /dev/sda4` pode ser usado para desmontar a partição, obcerve que não é preciso o caminho da pasta onde a partição foi montada.
+Caso use o comando `mount`apenas, será possível verificar as partições montadas mas seu retorno costuma ser longo e confuso, a melhor opção é usar novamente o comando *lsblk* para isto. O comando `sudo umount /dev/sda4` pode ser usado para desmontar a partição, observe que não é preciso o caminho da pasta onde a partição foi montada.
 
 ~~~shell
 operador@siscasa:~$ lsblk
@@ -416,53 +418,35 @@ sda      8:0    0 111,8G  0 disk
 └─sda4   8:4    0    51G  0 part /media/sda4
 ~~~
 
-Outra configuração importante é mudar a 
+Acima o retorno do comando *lsblk* onde é possível notar que a partição *sda4* foi montada na pasta */media/sda4*. Até o momento foram feitos os ajustes para que se possa montar a partição e depois a montagem em sí foi feita de forma manual. Para que seja feita a montagem de forma automática é preciso configurar o arquivo **fstab** que fica na pasta **/etc**. Este arquivo é bem sensível, seu preenchimento errado pode fazer com que o sistema não inicie na próxima vez que for liniciádo então é de suma importância criar uma cópia do arquivo antes de fazer qualquer alteração.
 
 ~~~shell
-operador@siscasa:/media/sda4$ cd ..
-operador@siscasa:/media$ ls
-sda4
-operador@siscasa:/media$ ls -l
-total 4
-drwxr-xr-x 3 root root 4096 ago  6  2022 sda4
-operador@siscasa:/media$ sudo chown -R operador:operador /media/sda4
-operador@siscasa:/media$ ls -l
-total 4
-drwxr-xr-x 3 operador operador 4096 ago  6  2022 sda4
-operador@siscasa:/media$ cd sda4/
-operador@siscasa:/media/sda4$ mkdir samba
-operador@siscasa:/media/sda4$ ls
-lost+found  samba
+
+$ cd /etc
+$ sudo cp fstab bk_fstab
+$ sudo nano fstab
 ~~~
 
+Os comandos acima navega até a pasta *etc*, cria uma cópia do arquivo e depois usa o comando *sudo nano* para abrí-lo permitindo edição. Deve-se informar os valores para:
 
-Neste exemplo 	(coluna 1) é montada a partição sda4 que está em /dev/sda4;
-			(coluna 2) na pasta /mnt/sda4, onde mnt (abreviação de mount) é uma pasta padrão do 
-					linux destinada a montagem de partições pelo usuário;
-			(coluna 3) de formato automático;
-			(coluna 4) montado de forma automática ao ligar o pc (auto) e com permição para 
-					rodar executáveis (exec)
-			(coluna 5) que não faz Dump (0);
-			(coluna 6) que não faz verificação e reparo (0).
+`<file system> <mount point>   <type>  <options>       <dump>  <pass>`
 
-/dev/sda4	/media/sda4	ext4	user,auto,rw,exec	0	0
+Esta linha já está salva no arquivo, está iniciada por `#` o que a transforma em comentário, são os nomes de cada campo que se deve informar.
+
+No final do arquivo foi incluído a linha abaixo com seus valores separados por *tab*
 
 ~~~shell
-operador@siscasa:/media/sda4$ lsblk
-NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
-loop0    7:0    0  63,5M  1 loop /snap/core20/2015
-loop1    7:1    0 111,9M  1 loop /snap/lxd/24322
-loop2    7:2    0   103M  1 loop /snap/lxd/23541
-loop3    7:3    0  49,6M  1 loop /snap/snapd/17883
-loop4    7:4    0  40,8M  1 loop /snap/snapd/20092
-loop5    7:5    0  63,2M  1 loop /snap/core20/1695
-sda      8:0    0 111,8G  0 disk 
-├─sda1   8:1    0     1M  0 part 
-├─sda2   8:2    0    50G  0 part /
-├─sda3   8:3    0    10G  0 part [SWAP]
-└─sda4   8:4    0    51G  0 part /media/sda4
-operador@siscasa:/media/sda4$ sudo nano /etc/fstab
+/dev/sda4	/media/sda4	ext4	users,auto,rw,exec	0	0
 ~~~
+
+Faça as alterações que forem necessárias para adapitá-la ao seu caso de acordo com a explicação seguinte. 
+
+* **file** system (coluna 1): o local do dispositivo que será montado = /dev/sda4;
+* **mount** point (coluna 2): Onde a montagem será feita = /media/sda4;
+* **type** (coluna 3): O formato usado para formatar a partição = ext4 (outra opção é usar *auto* o que deixa para o sistema identificar qual tipo usar);
+* **options** (coluna 4): montado para o grupo de usuário *users* = users, de forma automática ao ligar o pc = auto, permitindo a leitura e escrita = rw, com permição para rodar executáveis  = exec (este campo é separado por vírgula ficando da seguinte forma: *users,auto,rw,exec*);
+* **dump** (coluna 5): Configurado para não fazer Dump = 0;
+* **pass** (coluna 6): Configurado para não fazer verificação e reparo = 0.
 
 
 <a id="tampa_notebook"></a>
@@ -487,6 +471,32 @@ HandleLidSwitch=ignore
 operador@siscasa:/etc/systemd$ systemctl restart systemd-logind.service
 
 ~~~
+
+<a id="usuario_grupo"></a>
+
+### 3.5 Usuários e grupos
+
+<a id="seguranca"></a>
+
+### 3.6 Cuidados com a segurança
+
+~~~shell
+operador@siscasa:/media/sda4$ cd ..
+operador@siscasa:/media$ ls
+sda4
+operador@siscasa:/media$ ls -l
+total 4
+drwxr-xr-x 3 root root 4096 ago  6  2022 sda4
+operador@siscasa:/media$ sudo chown -R operador:operador /media/sda4
+operador@siscasa:/media$ ls -l
+total 4
+drwxr-xr-x 3 operador operador 4096 ago  6  2022 sda4
+operador@siscasa:/media$ cd sda4/
+operador@siscasa:/media/sda4$ mkdir samba
+operador@siscasa:/media/sda4$ ls
+lost+found  samba
+~~~
+
 
 ## 4 Atribuindo funcionalidades
 
