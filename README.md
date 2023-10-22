@@ -17,10 +17,11 @@
    * 3.1 [Configurando o Firewall](#configurando_firewall)
    * 3.2 [Configurando IP fixo](#configurando_ip_fixo)
    * 3.3 [Usando SSH](#ssh)
-   * 3.4 [Configurações opcionais](#configuracoes_especiais)
-      * 3.4.1 [Montando partição automaticamente ao ligar o servidor](#montando_particao)
-      * 3.4.2 [Configurando a tampa do Notebook](#tampa_notebook)
-   * 3.5 [Usuários e grupos](#usuario_grupo)
+   * 3.4 [Usuários e grupos](#usuario_grupo)
+   * 3.5 [Configurações opcionais](#configuracoes_especiais)
+      * 3.5.1 [Montando partição automaticamente ao ligar o servidor](#montando_particao)
+      * 3.5.2 [Configurando a tampa do Notebook](#tampa_notebook)
+   
    * 3.6 [Cuidados com a segurança](#seguranca)
 
 4. Atribuindo funcionalidades
@@ -313,15 +314,34 @@ $
 
  A linha `$` indica que a partir de agora você está dentro do servidor onde o seu usuário é *operador* e o nome do servidor é *siscasa* que foram definidos na instalação do Ubuntu. Note também que nem sempre, ao digitar uma senha no terminal Linux, aparecerá '*' para cada tecla clicada. 
 
+
+<a id="usuario_grupo"></a>
+
+### 3.4 Usuários e grupos
+
+Usuários e grupos são dois conceitos presentes em vários sistemas operacionais. Os usuários são criados para dar acesso ao sistema à pessoas ou serviços e os grupos controlam as permições que cada um possui, o que cada usuário pode ou não fazer.
+
+Como já dito, ao instalar o *Linux* é criado um usuário que por sua vez terá permições 
+
+~~~shell
+operador@siscasa:~$ sudo useradd leo -s /bin/bash
+operador@siscasa:~$ sudo passwd leo
+New password: 
+Retype new password: 
+passwd: password updated successfully
+operador@siscasa:~$ nano /etc/passwd
+~~~
+
+
 <a id="configuracoes_especiais"></a>
 
-### 3.4 Configurações opcionais
+### 3.5 Configurações opcionais
 
 As configurações a seguir serão necessárias caso tenha mais de uma partição disponível ou esteja usando um **Notebook** para montar este servidor. É necessário que monte de forma automática a partição ao ligar o servidor e configurar a tampa do notebook para que não suspenda ou desligue o servidor quando este estiver com a tampa fechada.
 
 <a id="montando_particao"></a>
 
-#### 3.4.1 Montando partição automaticamente ao ligar o servidor
+#### 3.5.1 Montando partição automaticamente ao ligar o servidor
 
 Caso tenha particionado seu dispositivo de armazenamento ou tenha mais de um dispositivo instalado, seja um **SSD** ou **HD**, será necessário montar esta partição automaticamente ao iniciar o servidor, se não sempre que o servidor for iniciádo deverá montar as partições no local apropriado. É o tipo de configuração que não é necessária quando está usando o *Linux* no seu PC particular a menos que tenha algum programa que use os arquivos salvos na partição em questão e precise que sejão disponibilizados o quanto antes.
 
@@ -427,7 +447,7 @@ $ sudo cp fstab bk_fstab
 $ sudo nano fstab
 ~~~
 
-Os comandos acima navega até a pasta *etc*, cria uma cópia do arquivo e depois usa o comando *sudo nano* para abrí-lo permitindo edição. Deve-se informar os valores para:
+Os comandos acima são para navegar até a pasta *etc*, criar uma cópia do arquivo e depois usa o comando *sudo nano* para abrí-lo permitindo edição. Deve-se informar os valores para:
 
 `<file system> <mount point>   <type>  <options>       <dump>  <pass>`
 
@@ -448,10 +468,21 @@ Faça as alterações que forem necessárias para adapitá-la ao seu caso de aco
 * **dump** (coluna 5): Configurado para não fazer Dump = 0;
 * **pass** (coluna 6): Configurado para não fazer verificação e reparo = 0.
 
+clique em **Ctrl + s** para salvar e depois **Ctrl + x** para fechar o arquivo. Reinicie o servidor usando o comando `reboot`, quando logar novamente verifique com `lsblk` se a partição foi montada automaticamente.
+
+Caso tenha preenchido algo errado no arquivo *fstab* o sistema provavelmente não irá iniciar, sendo direcionado para o **modo de emergência**. Aparecerá uma tela informando o ocorrido. Digite **Ctrl + D** para abrir o terminal, Vá até a pasta */etc* e analise o arquivo *fstab* em busca do possível erro.
+
+~~~shell
+$ sudo rm fstab
+$ sudo cp bk_fstab fstab
+$ reboot
+~~~
+
+Caso não consiga resolver, delete o arquivo e copie o arquivo que deixou de backup mas desta vez para o nome correto conforme coódigo acima. Reinicie novamente, se o sistema abrir é porque realmente o arquivo estava configurado errado. Tente novamente assim que for possível ou inadiável.
 
 <a id="tampa_notebook"></a>
 
-#### 3.4.2 Configurando a tampa do Notebook
+#### 3.5.2 Configurando a tampa do Notebook
 
 ~~~shell
 operador@siscasa:/media/sda4/samba$ cd /etc/systemd/
@@ -471,10 +502,6 @@ HandleLidSwitch=ignore
 operador@siscasa:/etc/systemd$ systemctl restart systemd-logind.service
 
 ~~~
-
-<a id="usuario_grupo"></a>
-
-### 3.5 Usuários e grupos
 
 <a id="seguranca"></a>
 
@@ -783,16 +810,7 @@ Até o momento o **PostgreSql** só foi acessado através do psql pois está log
 
 ### 5.1 Aprofundando conhecimento
 
-~~~shell
-operador@siscasa:~$ sudo useradd leo -s /bin/bash
-operador@siscasa:~$ sudo passwd leo
-New password: 
-Retype new password: 
-passwd: password updated successfully
-operador@siscasa:~$ nano /etc/passwd
-operador@siscasa:~$ 
 
-~~~
 
 ~~~shell
 sudo apt install cockpit
