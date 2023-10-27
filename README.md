@@ -18,6 +18,9 @@
    * 3.2 [Configurando IP fixo](#configurando_ip_fixo)
    * 3.3 [Usando SSH](#ssh)
    * 3.4 [Usuários e grupos](#usuario_grupo)
+      * 3.4.1 [Gerenciando usuários](#gerencia_usuario)
+      * 3.4.2 [Gerenciando grupos](#gerencia_grupo)
+
    * 3.5 [Configurações opcionais](#configuracoes_especiais)
       * 3.5.1 [Montando partição automaticamente ao ligar o servidor](#montando_particao)
       * 3.5.2 [Configurando a tampa do Notebook](#tampa_notebook)
@@ -319,9 +322,39 @@ $
 
 ### 3.4 Usuários e grupos
 
-Usuários e grupos são dois conceitos presentes em vários sistemas operacionais. Os usuários são criados para dar acesso ao sistema à pessoas ou serviços e os grupos controlam as permições que cada um possui, o que cada usuário pode ou não fazer.
+Usuários e grupos são dois conceitos presentes em vários sistemas operacionais. Os usuários são criados para dar acesso ao sistema à pessoas ou serviços e os grupos controlam as permissões que cada um possui, o que cada usuário pode ou não fazer.
 
-Como já dito, ao instalar o *Linux* é criado um usuário que por sua vez terá permições 
+Como já dito, ao instalar o *Linux* é solicitado a criação de um usuário. Este usuário recebe várias permições automaticamente, fazendo dele um usuário bastante podereso. Com ele será possível acessar as permições do usuário **root**, que é o usuário de administração do sistema, através do comando *sudo*.
+
+Na instalação foi criado o usuário **operador** com a senha **123456**. Ele será usado pro todo este tutorial, e por vezes o usuário *root*, para realizar as configurações.
+
+~~~shell
+operador@siscasa:~$ sudo -i
+[sudo] password for operador: 
+root@siscasa:~# 
+~~~
+
+Recaptulando, acima está como acessar o usuário *root*. Digite `sudo -i`, Abaixo aparecerá menságem solicitando sua senha. Este campo não mostra `*` para cada caracter digitado. Clique em *enter* em seguida e perceba que o início da linha mudará , neste exemplo foi de **operador@siscasa:~$** para **root@siscasa:~#**, indicando que o usuário mudou de *opedador* para *hoot* e o final mudou para `*`.
+
+Muito cuidado ao usar o usuário *root*. você pode danificar criticalmente seu sistema linux ao fazer alguma alteração indevida. Existem comandos já conhecidos que se executados irão destruir seu sistema como o comando `rm -rfv /` (**NÃO EXECUTE ESTE COMANDO**) que remove todos os arquivos desde a pasta raiz (diretório **/**).
+
+<a id="gerencia_usuario"></a>
+
+#### 3.4.1 Gerenciando usuários
+
+Primeiro passo será criar usuários novos. Serão criados dois novos unsuários:
+
+usuário = leo
+senha = 654321
+
+usuário = bia
+senha = 112233
+
+Todos os usuários e as respectivas senhas estão aqui pois trata-se de um tutorial didático. Nunca divulgue senhas seja lá qual for e não use senhas tão óbvias, ainda mais para usuários que podem acessar as permições de administrador do sistema.
+
+existem várias formas de se criar usuários, tem como criá-los já atribuindo senha ou criar mais de um usuário por vez. Para facilitar o entendimento será usada uma das formas mais prolixas possível.
+
+Para os dois blocos de códigos abaixo foi usado `useradd` para criar os usuários *leo* e *bia* onde `-s` configura o bash como o shell a ser usado pelo usuário. Para logar com o usuário *bia* por exemplo use o comando `su leo`.
 
 ~~~shell
 operador@siscasa:~$ sudo useradd leo -s /bin/bash
@@ -329,9 +362,58 @@ operador@siscasa:~$ sudo passwd leo
 New password: 
 Retype new password: 
 passwd: password updated successfully
-operador@siscasa:~$ nano /etc/passwd
 ~~~
 
+~~~shell
+operador@siscasa:~$ sudo useradd bia -s /bin/bash
+operador@siscasa:~$ sudo passwd bia
+New password: 
+Retype new password: 
+passwd: password updated successfully
+~~~
+
+Para deletar o usuário *bia* por exemplo digite `userdel bia`.
+
+<a id="gerencia_grupo"></a>
+
+#### 3.4.2 Gerenciando grupos
+
+Com qualquer um destes usuários você não consiguirá atualizar o sistema com `apt` por exemplo pois não estão configurados como usuários **sudo**. Abaixo visualizamos os usuários cadastrados como *sudo*
+
+~~~shell
+operador@siscasa:~$ cat /etc/group | grep sudo
+sudo:x:27:operador
+~~~
+
+O retorno do comando mostra que somente 0 usuário *operador* está cadastrado. Com o comando `adduser` adicionamos o usuário *leo* ao grupo *sudo* e verificamos novamente para certificar que a alteração foi concluída. Desta forma será possivel atualizar o sistema usando o usuário *leo*
+
+~~~shell
+operador@siscasa:~$ sudo adduser leo sudo
+Adding user `leo' to group `sudo' ...
+Adding user leo to group sudo
+Done.
+operador@siscasa:~$ cat /etc/group | grep sudo
+sudo:x:27:operador,leo
+~~~
+
+O comando `deluser` abaixo é usado para remover o usuário do grupo *sudo* e depois verificamos se de fato foi removido. caso tente novamente atualizar o sistema será impedido.
+
+~~~shell
+operador@siscasa:~$ sudo deluser leo sudo
+Removing user `leo' from group `sudo' ...
+Done.
+operador@siscasa:~$ cat /etc/group | grep sudo
+~~~
+
+Agora será criado um grupo com o objetivo de gerenciar os usuários dos serviços instalados futuramente. O nome deste grupo será *user_server*.
+
+~~~shell
+operador@siscasa:~$ sudo groupadd user_server
+operador@siscasa:~$ cat /etc/group | grep user
+users:x:100:
+user_server:x:1003:
+operador@siscasa:~$ 
+~~~
 
 <a id="configuracoes_especiais"></a>
 
@@ -464,7 +546,7 @@ Faça as alterações que forem necessárias para adapitá-la ao seu caso de aco
 * **file** system (coluna 1): o local do dispositivo que será montado = /dev/sda4;
 * **mount** point (coluna 2): Onde a montagem será feita = /media/sda4;
 * **type** (coluna 3): O formato usado para formatar a partição = ext4 (outra opção é usar *auto* o que deixa para o sistema identificar qual tipo usar);
-* **options** (coluna 4): montado para o grupo de usuário *users* = users, de forma automática ao ligar o pc = auto, permitindo a leitura e escrita = rw, com permição para rodar executáveis  = exec (este campo é separado por vírgula ficando da seguinte forma: *users,auto,rw,exec*);
+* **options** (coluna 4): montado para o grupo de usuário *users* = users, de forma automática ao ligar o pc = auto, permitindo a leitura e escrita = rw, com permissão para rodar executáveis  = exec (este campo é separado por vírgula ficando da seguinte forma: *users,auto,rw,exec*);
 * **dump** (coluna 5): Configurado para não fazer Dump = 0;
 * **pass** (coluna 6): Configurado para não fazer verificação e reparo = 0.
 
@@ -497,11 +579,23 @@ logind.conf     pstore.conf    system         user
 operador@siscasa:/etc/systemd$ sudo nano logind.conf 
 operador@siscasa:/etc/systemd$ cat logind.conf | grep HandleLidSwitch
 HandleLidSwitch=ignore
-#HandleLidSwitchExternalPower=suspend
+#HandleLidSwitchExternalPower=ignore
 #HandleLidSwitchDocked=ignore
 operador@siscasa:/etc/systemd$ systemctl restart systemd-logind.service
 
+
+
 ~~~
+
+~~~shell
+operador@siscasa:~$ cd /etc/default/
+operador@siscasa:/etc/default$ sudo nano grub
+operador@siscasa:/etc/default$ sudo update-grub
+~~~
+
+GRUB_CMDLINE_LINUX=""
+GRUB_CMDLINE_LINUX="consoleblank=300"
+
 
 <a id="seguranca"></a>
 
