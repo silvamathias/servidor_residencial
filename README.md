@@ -345,16 +345,18 @@ Muito cuidado ao usar o usuário *root*. você pode danificar criticalmente seu 
 Primeiro passo será criar usuários novos. Serão criados dois novos unsuários:
 
 usuário = leo
+
 senha = 654321
 
 usuário = bia
+
 senha = 112233
 
 Todos os usuários e as respectivas senhas estão aqui pois trata-se de um tutorial didático. Nunca divulgue senhas seja lá qual for e não use senhas tão óbvias, ainda mais para usuários que podem acessar as permições de administrador do sistema.
 
 existem várias formas de se criar usuários, tem como criá-los já atribuindo senha ou criar mais de um usuário por vez. Para facilitar o entendimento será usada uma das formas mais prolixas possível.
 
-Para os dois blocos de códigos abaixo foi usado `useradd` para criar os usuários *leo* e *bia* onde `-s` configura o bash como o shell a ser usado pelo usuário. Para logar com o usuário *bia* por exemplo use o comando `su leo`.
+Para os dois blocos de códigos abaixo foi usado `useradd` para criar os usuários *leo* e *bia* onde `-s` configura o bash como o shell a ser usado pelo usuário. Em seguida o comando `passwd` permite a configuração da senha do usuário. Para logar com o usuário *bia* por exemplo use o comando `su leo`.
 
 ~~~shell
 operador@siscasa:~$ sudo useradd leo -s /bin/bash
@@ -405,14 +407,37 @@ Done.
 operador@siscasa:~$ cat /etc/group | grep sudo
 ~~~
 
-Agora será criado um grupo com o objetivo de gerenciar os usuários dos serviços instalados futuramente. O nome deste grupo será *user_server*.
+Agora será criado um grupo com o objetivo de melhor gerenciar os usuários dos serviços instalados futuramente. O nome deste grupo será *user_server*. Com o comando `groupadd` foi criado o grupo e depois verificado se a criação obteve êxito através do comando `cat /etc/group` e filtrando com `| grep user_server` pelo nome do novo grupo. Para excluir um grupo use o `groupdel`. Não é recomendados deletar grupos que foram criados pelo sistema.
 
 ~~~shell
 operador@siscasa:~$ sudo groupadd user_server
-operador@siscasa:~$ cat /etc/group | grep user
-users:x:100:
+operador@siscasa:~$ cat /etc/group | grep user_server
 user_server:x:1003:
 operador@siscasa:~$ 
+~~~
+
+Uma vez o grupo tenha sido criado, basta adicionar os unuários à ele.
+
+~~~shell
+operador@siscasa:~$ sudo adduser operador user_server 
+Adding user `operador' to group `user_server' ...
+Adding user operador to group user_server
+Done.
+operador@siscasa:~$ sudo adduser leo user_server 
+Adding user `leo' to group `user_server' ...
+Adding user leo to group user_server
+Done.
+operador@siscasa:~$ sudo adduser bia user_server 
+Adding user `bia' to group `user_server' ...
+Adding user bia to group user_server
+Done.
+~~~
+
+Ao finalizar esta tarefa, verifique se todos constam no arquivo */etc/group* como pertencentes ao grupo.
+
+~~~shell
+operador@siscasa:~$ cat /etc/group | grep user_server
+user_server:x:1003:operador,leo,bia
 ~~~
 
 <a id="configuracoes_especiais"></a>
@@ -425,9 +450,9 @@ As configurações a seguir serão necessárias caso tenha mais de uma partiçã
 
 #### 3.5.1 Montando partição automaticamente ao ligar o servidor
 
-Caso tenha particionado seu dispositivo de armazenamento ou tenha mais de um dispositivo instalado, seja um **SSD** ou **HD**, será necessário montar esta partição automaticamente ao iniciar o servidor, se não sempre que o servidor for iniciádo deverá montar as partições no local apropriado. É o tipo de configuração que não é necessária quando está usando o *Linux* no seu PC particular a menos que tenha algum programa que use os arquivos salvos na partição em questão e precise que sejão disponibilizados o quanto antes.
+Caso tenha particionado seu dispositivo de armazenamento ou tenha mais de um dispositivo instalado, seja um **SSD** ou **HD**, será necessário montar esta partição automaticamente ao iniciar o servidor, se não sempre que o servidor for iniciádo deverá montar as partições no local apropriado. É o tipo de configuração que não é necessária quando está usando o *Linux* no seu PC particular a menos que tenha algum programa que use os arquivos salvos na partição em questão e precise que sejam disponibilizados o quanto antes.
 
-Use o comando `lsblk` para listar os dispositivos de armazenamento e suas informações relevantes, incluíndo o **ponto de montagem**
+Use o comando `lsblk` para listar os dispositivos de armazenamento e suas informações relevantes, incluíndo o **ponto de montagem**.
 
 ~~~shell
 operador@siscasa:/$ lsblk
@@ -538,7 +563,7 @@ Esta linha já está salva no arquivo, está iniciada por `#` o que a transforma
 No final do arquivo foi incluído a linha abaixo com seus valores separados por *tab*
 
 ~~~shell
-/dev/sda4	/media/sda4	ext4	users,auto,rw,exec	0	0
+/dev/sda4	/media/sda4	ext4	user,auto,rw,exec	0	0
 ~~~
 
 Faça as alterações que forem necessárias para adapitá-la ao seu caso de acordo com a explicação seguinte. 
@@ -566,35 +591,44 @@ Caso não consiga resolver, delete o arquivo e copie o arquivo que deixou de bac
 
 #### 3.5.2 Configurando a tampa do Notebook
 
+Esta configurtação deve ser feita se foi usado um *Notebook* para montar o servidor. Ela evita que o sistema desligue caso a tampa do aparelho seja fechada, configuração importante para manter sempre o Notebook ativo mesmo que com a tampa abaixada, permitindo que fique discretamente ao lado do servidor na sala ou em algum outro canto da casa. Uma vez a tampa abaixada é importante que se desligue ela, econumisando energia.
+
+Para que o *Notebook* não desligue será atualizado o arquivo *logind.conf* que está no diretório */etc/systemd/*. Navegue até a pasta e depois crie um arquivo de *backuop*. Abra o arquivo com `sudo nano` e procure todas as linhas que iniciem com **HandleLidSwitch**, mude seus valores para **ignore**.
 ~~~shell
 operador@siscasa:/media/sda4/samba$ cd /etc/systemd/
-operador@siscasa:/etc/systemd$ cp logind.conf bk_logind.conf 
-cp: cannot create regular file 'bk_logind.conf': Permission denied
 operador@siscasa:/etc/systemd$ sudo cp logind.conf bk_logind.conf 
-[sudo] password for operador: 
 operador@siscasa:/etc/systemd$ ls
 bk_logind.conf  network        resolved.conf  system.conf     user.conf
 journald.conf   networkd.conf  sleep.conf     timesyncd.conf
 logind.conf     pstore.conf    system         user
 operador@siscasa:/etc/systemd$ sudo nano logind.conf 
+~~~
+
+Após salvar e sair do arquivo use `cat logind.conf | grep HandleLidSwitch` para verificar se todas as linhas foram alteradas corretamente. Estando tudo configurado corretamente, reinicie o serviço com `systemctl restart systemd-logind.service`. 
+
+~~~shell
 operador@siscasa:/etc/systemd$ cat logind.conf | grep HandleLidSwitch
 HandleLidSwitch=ignore
-#HandleLidSwitchExternalPower=ignore
-#HandleLidSwitchDocked=ignore
+HandleLidSwitchExternalPower=ignore
+HandleLidSwitchDocked=ignore
 operador@siscasa:/etc/systemd$ systemctl restart systemd-logind.service
-
-
-
 ~~~
+
+No arquivo *grub* será configurado o desligamento da tela para economizar energia.  Navegue até a pasta */etc/default/* e lá faça o backup do arquivo e em seguida abra o arquivo para editá-lo, nele mude a linha `GRUB_CMDLINE_LINUX=""` para `GRUB_CMDLINE_LINUX="consoleblank=300"`.
 
 ~~~shell
 operador@siscasa:~$ cd /etc/default/
+operador@siscasa:/etc/default$ sudo cp grub bk_grub
 operador@siscasa:/etc/default$ sudo nano grub
+~~~
+
+Salve e saia do arquivo, pode usar o comando `cat` para verificar se a alteração foi realizada. Depois reinicie o serviço com `sudo update-grub`.
+
+~~~shell
 operador@siscasa:/etc/default$ sudo update-grub
 ~~~
 
-GRUB_CMDLINE_LINUX=""
-GRUB_CMDLINE_LINUX="consoleblank=300"
+
 
 
 <a id="seguranca"></a>
@@ -614,7 +648,8 @@ total 4
 drwxr-xr-x 3 operador operador 4096 ago  6  2022 sda4
 operador@siscasa:/media$ cd sda4/
 operador@siscasa:/media/sda4$ mkdir samba
-operador@siscasa:/media/sda4$ ls
+operador@siscasa:/media/sda4$ sudo chown -R operador:user_server samba
+operador@siscasa:/media/sda4$ ls -l
 lost+found  samba
 ~~~
 
@@ -636,14 +671,34 @@ operador@siscasa:/etc/samba$ sudo cp smb.conf bk_smb.conf
 operador@siscasa:/etc/samba$ ls 
 bk_smb.conf  gdbcommands  smb.conf  tls
 operador@siscasa:/etc/samba$ sudo nano smb.conf 
+$ sudo testparm
+
 ~~~
 
+`workgroup = user_server`
+
 ~~~shell
-[sambashare]
-    comment = Samba on Ubuntu
-    path = /media/sda4/samba
-    read only = no
-    browsable = yes
+workgroup = WORKGROUP
+netbios name = siscasa
+
+
+[arquivos]
+   comment = pasta para compartilhamento de arquivos
+   path = /media/sda4/samba/arquivos
+   public = no 
+   writable = yes
+   force group = user_server
+   create mask = 0770
+   directory mask = 0770
+   valid users = @user_server
+
+[privados]
+   comment = pasta para guardar arquivos de forma privada
+   path = /media/sda4/samba/privados     
+   read only = no
+   create mask = 0700
+   directory mask = 0700
+   valid users = @user_server
 ~~~
 
 ~~~shell
@@ -664,6 +719,31 @@ Retype new SMB password:
 Added user operador.
 operador@siscasa:/etc/samba$ systemctl status smbd
 ~~~
+
+~~~shell
+operador@siscasa:~$ sudo smbpasswd -a operador
+New SMB password:
+Retype new SMB password:
+operador@siscasa:~$ sudo smbpasswd -a leo
+New SMB password:
+Retype new SMB password:
+operador@siscasa:~$ sudo smbpasswd -a bia
+New SMB password:
+Retype new SMB password:
+Added user bia.
+operador@siscasa:~$ sudo smbpasswd -a eva
+New SMB password:
+Retype new SMB password:
+Failed to add entry for user eva.
+operador@siscasa:~$ sudo pdbedit -L -v | grep username
+Unix username:        operador
+NT username:          
+Unix username:        bia
+NT username:          
+Unix username:        leo
+NT username:          
+~~~
+
 
 <a id="acesso_samba_windows"></a>
 
