@@ -120,7 +120,8 @@ apt (apt-get)|gerenciador de pacote do Debian e suas distros derivadas
 btop|possui o mesmo objetivo que o *htop* mas com um visual diferente
 cat|mostra o conteudo de um arquivo texto
 cd|navega pelos diretórios do sistema
-chown|altera o dono de um arquivo ou pasta, alterando assim as permissões de acesso e manipulação do item
+chmod|altera as permissões de arquivos ou pastas, segregando por dono, grupo e visitantes 
+chown|altera o dono e o grupo de um arquivo ou pasta
 clear|limpa a tela do terminal. As teclas *"Ctrl l"* também funciona da mesma forma
 cp|copia um arquivo
 grep|realiza um filtro no comando anterior
@@ -146,11 +147,18 @@ Caso isto ocorra com o *btop* por exemplo, basta usar o comando `sudo apt instal
 
 ## 3 Configurando o servidor
 
+Este tópico trata sobre a configuração básica do servidor, alterações que devem ser feitas para o bom uso do mesmo independente do seu propósito. 
 <a id="configurando_firewall"></a>
 
 ### 3.1 Configurando o Firewall
 
-HAbilitar o Firewall 
+Firewall é um recurso de segurança de rede que protege seu sistema de ataques de invasão. Embora de extrema importância, ele por si só não será o suficiente para evitar todo o tipo de ameaças mas será um grande aliado.
+
+**Nota de Segurança:** 
+   
+   Esta é uma configuração que pode ser feita ao final, depois de ter sucesso em configurar o servidor e conseguir usá-lo como planejado. Lembrando que assim que for habilitado todos os acessos serão perdidos até que se libere as portas novamente.
+
+No Linux o firewall é configurado pelo **ufw**. O comando `sudo ufw enable` habilita o Firewall.
 
 ~~~shell
 #Ative o ufw
@@ -159,8 +167,7 @@ $ sudo ufw enable
 Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
 Firewall is active and enabled on system startup
 ~~~
-
-Aproveite para liberar o uso do *ssh* caso já tenha instalado durante a instalação do *Ubuntu*
+Pronto, o firewall já está ativo, agora deve-se configurar as portas de cada dispositivo. Caso já tenha instalado o *ssh* durante a instalação do *Ubuntu*, já se pode configurar seu acesso conforme abaixo. 
 
 ~~~shell
 #liberar o firewall para o ssh:
@@ -329,7 +336,7 @@ nota de segurança
 
 ### 3.4 Usuários e grupos
 
-Usuários e grupos são dois conceitos presentes em vários sistemas operacionais. Os usuários são criados para dar acesso ao sistema à pessoas ou serviços e os grupos controlam as permissões que cada um possui, o que cada usuário pode ou não fazer.
+Usuários e grupos são dois conceitos presentes em vários sistemas operacionais. Os usuários são criados para dar acesso ao sistema à pessoas ou serviços e os grupos controlam as permissões para um conjunto de usuários vinculados a ele.
 
 Como já dito, ao instalar o *Linux* é solicitado a criação de um usuário. Este usuário recebe várias permições automaticamente, fazendo dele um usuário bastante podereso. Com ele será possível acessar as permições do usuário **root**, que é o usuário de administração do sistema, através do comando *sudo*.
 
