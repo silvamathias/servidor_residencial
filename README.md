@@ -7,6 +7,7 @@
     * 1.2 [Por que faser um servidor físico?](#por_que_fazer)
     * 1.3 [Requisitos](#requisitos)
         * 1.3.1 [Sistema Operacional](#sys_operacional)
+    * 1.4 [Cuidados com a segurança](#seguranca)
 
 2. Instalando o Linux
     * 2.1 [Criando Pen drive bootavel e instalação](#criando_pendrive)
@@ -24,8 +25,6 @@
    * 3.5 [Configurações opcionais](#configuracoes_especiais)
       * 3.5.1 [Montando partição automaticamente ao ligar o servidor](#montando_particao)
       * 3.5.2 [Configurando a tampa do Notebook](#tampa_notebook)
-   
-   * 3.6 [Cuidados com a segurança](#seguranca)
 
 4. Atribuindo funcionalidades
    * 4.1 [Instalando o SAMBA](#samba)
@@ -64,6 +63,13 @@
 As distribuições **Linux** mais comuns em servidores são Debian, Ubuntu, SUSE, Red Hat Enterprise Linux, CentOS e Fedora. A **Ubuntu** é mantida pela empresa Canonical. É uma distro (abreviação de distribuição) derivada do Debian e a maior diferença entre elas é que o Debian restringe o uso de programas proprietários, o que também inclui drivers, já a **Ubuntu** deixa esta decisão por conta do usuário final. A Distro Red Hat é mantida pela empresa de mesmo nome. Seu foco principal é o mercado corporativo, vendendo serviços de suporte e manutenão para as empresas que queiram criar seus hambientes usando linux. Por conta disso é difícil uma pessoa física usar seu sistema, contando apenas com um prazo de 30 dias para testar a distro antes de ter que pagar pelo cerviço. A opção mais usada são as distros derivadas do Red Hat, CentOS e Fedora, que são mantidas pela comunidade porém contam com o apoio da Red Hat.
 
 Para este projeto foi escolhida a distro Ubuntu, muito por conta de sua popularidade, o que a faz uma distro de fácil acesso a materias para consulta na internet, além do site da propria Canonical.
+
+<a id="seguranca"></a>
+
+### 1.4 Cuidados com a segurança
+
+Este tutorial tem o objetivo didático, aprender mais sobre Linux com uma abordagem mais profissional, porém com o intúito de ser acessível a pessoas de todos os níveis de conhecimanto. Tendo isto em vista a prioridade é que quem a use consiga fazer um servidor funcionar mesmo com brechas de segurança, o que pode facilitar invasões ao sistema. A idéia é que ao ver que o servidor está funcionando, o leitor se sinta motivado e sinta que já aprendeu algo. Se de fato queira mais segurança ou busque aprofundar mais nos tópicos bastará seguir as insugestões das **Notas de Segurança** toda vez que apareça uma em algum tópico.
+  
 
 ## 2 Instalando o Linux
 
@@ -317,6 +323,7 @@ $
 
  A linha `$` indica que a partir de agora você está dentro do servidor onde o seu usuário é *operador* e o nome do servidor é *siscasa* que foram definidos na instalação do Ubuntu. Note também que nem sempre, ao digitar uma senha no terminal Linux, aparecerá '*' para cada tecla clicada. 
 
+nota de segurança
 
 <a id="usuario_grupo"></a>
 
@@ -587,6 +594,8 @@ $ reboot
 
 Caso não consiga resolver, delete o arquivo e copie o arquivo que deixou de backup mas desta vez para o nome correto conforme coódigo acima. Reinicie novamente, se o sistema abrir é porque realmente o arquivo estava configurado errado. Tente novamente assim que for possível ou inadiável.
 
+
+
 <a id="tampa_notebook"></a>
 
 #### 3.5.2 Configurando a tampa do Notebook
@@ -627,32 +636,6 @@ Salve e saia do arquivo, pode usar o comando `cat` para verificar se a alteraç�
 ~~~shell
 operador@siscasa:/etc/default$ sudo update-grub
 ~~~
-
-
-
-
-<a id="seguranca"></a>
-
-### 3.6 Cuidados com a segurança
-
-~~~shell
-operador@siscasa:/media/sda4$ cd ..
-operador@siscasa:/media$ ls
-sda4
-operador@siscasa:/media$ ls -l
-total 4
-drwxr-xr-x 3 root root 4096 ago  6  2022 sda4
-operador@siscasa:/media$ sudo chown -R operador:operador /media/sda4
-operador@siscasa:/media$ ls -l
-total 4
-drwxr-xr-x 3 operador operador 4096 ago  6  2022 sda4
-operador@siscasa:/media$ cd sda4/
-operador@siscasa:/media/sda4$ mkdir samba
-operador@siscasa:/media/sda4$ sudo chown -R operador:user_server samba
-operador@siscasa:/media/sda4$ ls -l
-lost+found  samba
-~~~
-
 
 ## 4 Atribuindo funcionalidades
 
@@ -867,7 +850,6 @@ postgres=# select * from pg_user;
 <a id="criando_e_acessando_bd"></a>
 
 #### 4.2.4 Criando e acessando um banco de dados
-
 
 Só será possível criar um banco de dados usando o psql. Caso não tenha certeza do banco que deseja criar, siga o exemplo abaixo mas saiba que terá que acessar desta forma para criar outros banco.
 
