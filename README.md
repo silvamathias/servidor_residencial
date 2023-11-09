@@ -16,7 +16,7 @@
 
 3. Configurando o servidor
    * 3.1 [Configurando o Firewall](#configurando_firewall)
-   * 3.2 [Configurando IP fixo](#configurando_ip_fixo)
+   * 3.2 [Configurando IP estático](#configurando_ip_fixo)
    * 3.3 [Usando SSH](#ssh)
    * 3.4 [Usuários e grupos](#usuario_grupo)
       * 3.4.1 [Gerenciando usuários](#gerencia_usuario)
@@ -158,7 +158,7 @@ Firewall é um recurso de segurança de rede que protege seu sistema de ataques 
    
    Esta é uma configuração que pode ser feita ao final, depois de ter sucesso em configurar o servidor e conseguir usá-lo como planejado. Lembrando que assim que for habilitado todos os acessos serão perdidos até que se libere as portas novamente.
 
-No Linux o firewall é configurado pelo **ufw**. O comando `sudo ufw enable` habilita o Firewall.
+No Linux o firewall é configurado pelo **ufw**. O comando `sudo ufw enable` habilita o Firewall e `sudo ufw disable` para desabilitá-lo.
 
 ~~~shell
 #Ative o ufw
@@ -167,7 +167,8 @@ $ sudo ufw enable
 Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
 Firewall is active and enabled on system startup
 ~~~
-Pronto, o firewall já está ativo, agora deve-se configurar as portas de cada dispositivo. Caso já tenha instalado o *ssh* durante a instalação do *Ubuntu*, já se pode configurar seu acesso conforme abaixo. 
+
+Pronto, o firewall já está ativo, agora deve-se configurar as regras para cada serviço. Caso já tenha instalado o *ssh* durante a instalação do *Ubuntu*, já se pode configurar seu acesso criando uma regra conforme abaixo. 
 
 ~~~shell
 #liberar o firewall para o ssh:
@@ -176,9 +177,89 @@ Rule added
 Rule added (v6)
 ~~~
 
+Por padrão o *ssh* usa a porta **22** então é possível liberar diretamente indormando a porta. Como exemplo libere a porta **80** que é usada pelo protocolo **HTTP**
+
+~~~shell
+operador@siscasa:~$ sudo ufw allow 80 
+Rule added
+Rule added (v6)
+~~~
+
+Também é possível criar regra para negar acessos de um determinado **IP** por exemplo.
+
+~~~shell
+operador@siscasa:~$ sudo ufw deny from 192.168.0.10
+Rule added
+~~~
+
+Para ver as suas regras basta usar o comando `sudo ufw status verbose`:
+
+~~~shell
+operador@siscasa:~$ sudo ufw status verbose
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----                
+22/tcp                     ALLOW IN    Anywhere                  
+80                         ALLOW IN    Anywhere  
+Anywhere                   DENY IN     192.168.0.10                            
+22/tcp (v6)                ALLOW IN    Anywhere (v6)                     
+80 (v6)                    ALLOW IN    Anywhere (v6)
+~~~
+
+Outra opção é usar o comando `sudo ufw status numbered` para mostrar a lista numerada
+
+~~~shell
+operador@siscasa:~$ sudo ufw status numbered
+Status: active
+
+     To                         Action      From
+     --                         ------      ----                
+[ 1] 22/tcp                     ALLOW IN    Anywhere                                                   
+[ 2] 80                         ALLOW IN    Anywhere                  
+[ 3] Anywhere                   DENY IN     192.168.0.10                          
+[ 4] 22/tcp (v6)                ALLOW IN    Anywhere (v6)                          
+[5] 80 (v6)                    ALLOW IN    Anywhere (v6) 
+~~~
+
+Para deletar regras é possível informar esta numeração conforme abaixo
+
+~~~shell
+operador@siscasa:~$ sudo ufw delete 3
+Deleting:
+ deny from 192.168.0.10
+Proceed with operation (y|n)? y
+Rule deleted
+~~~
+
+Ou pode-se usar diretamente o nome da regra
+
+~~~shell
+operador@siscasa:~$ sudo ufw delete allow 80
+Rule deleted
+Rule deleted (v6)
+~~~
+
+Ao final de tantas alterações é importante verificar se tudo está da forma que deseja
+
+~~~shell
+operador@siscasa:~$ sudo ufw status
+Status: active
+
+To                         Action      From
+--                         ------      ----                 
+22/tcp                     ALLOW       Anywhere                                                
+22/tcp (v6)                ALLOW       Anywhere (v6)             
+~~~
+
 <a id="configurando_ip_fixo"></a>
 
-### 3.2 Configurando IP fixo
+### 3.2 Configurando IP estático
+
+O IP é um protocolo de transação de dados que atribui um número único ao computador o identificando tanto na rede local quanto na internet. Em uma rede local geralmente o IP é configurado como Dinâmico, sendo alterado de forma recorrente e aleatória. Caso seu servidor esteja com o IP dinâmico será necessário descobrir qual é o novo IP atribuido a ele toda vez que for alterado. Configurando o IP de forma estática isto não ocorrerá, sempre que precisar acessar o servidor o IP será o mesmo. 
 
 Com o comando `ip a` é possível decobrir o nome da placa de rede usada e que neste exemplo é **enp3s0**
 
@@ -274,6 +355,8 @@ root@siscasa:/etc/netplan# netplan apply
 <a id="ssh"></a>
 
 ### 3.3 Usando SSH
+
+O protocolo **ssh** é ...
 
 O **Ubuntu** server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use os comandos:
 
