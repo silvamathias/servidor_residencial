@@ -356,7 +356,9 @@ root@siscasa:/etc/netplan# netplan apply
 
 ### 3.3 Usando SSH
 
-O protocolo **ssh** é ...
+O **ssh** (Secure Socket Shell) é um protocolo que usa a arquitetura cliente-servidor para criar um canal seguro sobre uma rede insegura. O uso mais comum desta tecnologia é acessar outros computadores de forma remota e será justamente esta função que usaremos neste tutorial. Outro uso para o *ssh* é se autenticar em sistemas. O **GitHub** por exemplo tem esta opção de acesso, permitindo que se possa atualizar um reposítório enviando as atualizações de um repositório local (seu computador) para o repositório remoto do *Github* através de uma chave ssh cadastrada.
+
+O *ssh* geralmente já está presente em vários sistemasatuais, em especial nas distribuições linux, MacOS e outros projetos derivados do [unix](https://pt.wikipedia.org/wiki/Unix) como o **FreeBSD**. A partir do Windows 10 o *ssh* também já está presente e pode ser usado como no linux através do **CMD** ou **PowerShell**. Caso esteja com verções mais antigas uma boa sugestão é usar o [PuTTY](https://www.putty.org/). 
 
 O **Ubuntu** server já dá a opção de instalar o programa SSH que permite acesso seguro ao computador remotamente. Caso não tenha instalado use os comandos:
 
@@ -364,8 +366,6 @@ O **Ubuntu** server já dá a opção de instalar o programa SSH que permite ace
 * `sudo service ssh start` para iniciar o serviço;
 * `sudo ufw allow ssh` para liberar o *Firewall*
 * `ps aux | grep ssh` para testar o programa.
-
-
 
 Como alteramos o IP para **192.168.0.101** basta usá-lo para conectar através do *SSH*. Caso não tenha trocado ainda ou queira confirmar, use o comando `ip a` para isto.
 
@@ -728,6 +728,8 @@ operador@siscasa:/etc/default$ sudo update-grub
 ~~~
 
 ## 4 Atribuindo funcionalidades
+
+Até este ponto ...
 
 <a id="samba"></a>
 
