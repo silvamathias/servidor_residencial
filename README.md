@@ -729,7 +729,7 @@ operador@siscasa:/etc/default$ sudo update-grub
 
 ## 4 Atribuindo funcionalidades
 
-Até este ponto ...
+Até este ponto só foram feitas configurações que asseguram o bom funcionamento do servidor ao longo do tempo ou para usar todos os dispositivos de armazenamento de torma automática. Nesta parte é apresentada sugestões de uso para o servidor sendo eles o uso como servidor de arquivos ao compartilhar pasta usando o protocolo **SMB** o que permite também o acesso através de computadores *Windows*, e um banco de dados utilizando o PostgreSQL.
 
 <a id="samba"></a>
 
@@ -740,8 +740,6 @@ $ sudo apt install samba
 $ cd /etc/samba
 operador@siscasa:/etc/samba$ ls
 gdbcommands  smb.conf  tls
-operador@siscasa:/etc/samba$ cp smb.conf bk_smb.conf 
-cp: cannot create regular file 'bk_smb.conf': Permission denied
 operador@siscasa:/etc/samba$ sudo cp smb.conf bk_smb.conf 
 operador@siscasa:/etc/samba$ ls 
 bk_smb.conf  gdbcommands  smb.conf  tls
